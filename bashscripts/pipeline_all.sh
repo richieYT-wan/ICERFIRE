@@ -1,5 +1,8 @@
 #! /usr/bin/bash
 
+source /home/projects/vaccine/people/yatwan/anaconda3/etc/profile.d/conda.sh
+source activate phd
+
 FILENAME=${1}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
@@ -15,6 +18,6 @@ PYDIR="${USERDIR}ICERFIRE/pyscripts/"
 
 sh netmhcpan_pipeline.sh ${FILENAME}
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
-cd PYDIR
+cd ${PYDIR}
 python3 run_model.py -f "${TMP}${final_fn}.txt" -pf "${TMP}${final_fn}_wt_icore_pepx_output.txt"
 rm ${TMP}/*
