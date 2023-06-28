@@ -13,7 +13,6 @@ fi
 PEPXDIR='/home/projects/vaccine/people/yatwan/pepx/'
 TMPDIR='/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/'
 filepath=$1
-echo "Running PepX on ${1}"
 dataset_id=1
 filename=$(basename "$filepath")
 basenm="${filename%.*}"
@@ -30,7 +29,9 @@ query="$query dataset_id = $dataset_id"
 query="$query and peptide in (\"$peptide_string\")"
 query="$query order by peptide asc;"
 
+echo "Running PepX query on ${1}"
 sqlite3 $database -header "$query" > "${TMPDIR}${output_file}.csv"
+echo "Query done ; Updating table format and removing temporary files"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
