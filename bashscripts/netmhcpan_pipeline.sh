@@ -98,7 +98,6 @@ echo "#######################"
 
 len1=$(wc -l "${OUTDIR}merged_output.txt" | awk '{print $1}')
 fn=$(basename "${OUTDIR}merged_output.txt")
-echo ${fn}
 echo "icore_similarity_score" > "${OUTDIR}${fn}.kerndist"
 for i in $(seq 2 $len1)
 do
