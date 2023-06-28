@@ -32,29 +32,29 @@ while IFS=',' read -r column1 column2 column3; do
   echo "$column1" >> "$tmp_file_mut"
 
   # run program with temporary file and second column as arguments
-  ${NETMHCPAN} -l 8,9,10,11,12 -f "$tmp_file_mut" -a "$column3" -s > output_tmp_mut.txt
+  ${NETMHCPAN} -l 8,9,10,11,12 -f "$tmp_file_mut" -a "$column3" -s > "${OUTDIR}output_tmp_mut.txt"
 
   # discard lines starting with #, select the line that has the lowest value for the Rnk_EL column, discard blank lines and lines starting with HLA, and write output to final_output.txt
   # Saving only selected columns
   # Pos HLA Peptide Core Of Gp Gl Ip Il Icore Rnk_EL
-  grep -v '^#' output_tmp_mut.txt | grep -v '^HLA' | grep -v '^\-' | awk 'NF' | awk 'FNR==2{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$13}' >> "${OUTDIR}almostfinal_output_mut.txt"
+  grep -v '^#' "${OUTDIR}output_tmp_mut.txt" | grep -v '^HLA' | grep -v '^\-' | awk 'NF' | awk 'FNR==2{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$13}' >> "${OUTDIR}almostfinal_output_mut.txt"
 
   ########################
   # PROCESSING WILD TYPE #
   ########################
 
   # Get the starting position, and length to get the wt_aligned_icore
-  start=$(grep -v '^#' output_tmp_mut.txt | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| head -n 2 | awk '{print $1}' | awk 'FNR==2{print $1}')
-  length=$(grep -v '^#' output_tmp_mut.txt | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| head -n 2 | awk 'FNR==2{print length($10)}')
+  start=$(grep -v '^#' "${OUTDIR}output_tmp_mut.txt" | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| head -n 2 | awk '{print $1}' | awk 'FNR==2{print $1}')
+  length=$(grep -v '^#' "${OUTDIR}output_tmp_mut.txt" | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| head -n 2 | awk 'FNR==2{print length($10)}')
   wt_aligned="${column2:$((start-1)):length}"
 
   # Saving temp file and running netmhcpan in peptide mode
   tmp_file_wt=$(mktemp)
   echo "$wt_aligned" > "$tmp_file_wt"
-  ${NETMHCPAN} -l ${length} -p "$tmp_file_wt" -a "$column3" -s > output_tmp_wt.txt
+  ${NETMHCPAN} -l ${length} -p "$tmp_file_wt" -a "$column3" -s > "${OUTDIR}output_tmp_wt.txt"
 
   # Discard line and grepping, extract only the aligned peptide and rank
-  grep -v '^#' output_tmp_wt.txt | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| awk 'FNR==2{print $3,$13}' >> "${OUTDIR}almostfinal_output_wt.txt"
+  grep -v '^#' "${OUTDIR}output_tmp_wt.txt" | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| awk 'FNR==2{print $3,$13}' >> "${OUTDIR}almostfinal_output_wt.txt"
   # remove temporary file
   rm "$tmp_file_mut"
   rm "$tmp_file_wt"
