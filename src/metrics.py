@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from torch import nn as nn
 
-from src.data_processing import verify_df, get_dataset
+from src.data_processing import verify_df, get_dataset, get_test_dataset
 from src.utils import get_palette
 
 mpl.rcParams['figure.dpi'] = 180
@@ -16,7 +16,7 @@ from sklearn.metrics import roc_curve, roc_auc_score, f1_score, accuracy_score, 
     recall_score, precision_score, precision_recall_curve, auc, average_precision_score
 
 
-def get_predictions(df, models, ics_dict, encoding_kwargs):
+def get_predictions(df, models, ics_dict, encoding_kwargs, test_mode=False):
     """
 
     Args:
@@ -29,11 +29,12 @@ def get_predictions(df, models, ics_dict, encoding_kwargs):
         df (pd.DataFrame): DataFrame containing the Peptide-HLA pairs to evaluate
         models (list): A.DataFrame): Original DataFrame + a column predictions which are the scores + y_true
     """
-
-    df = verify_df(df, encoding_kwargs['seq_col'], encoding_kwargs['hla_col'],
-                   encoding_kwargs['target_col'])
-
-    x, y = get_dataset(df, ics_dict, **encoding_kwargs)
+    if test_mode:
+        x = get_test_dataset(df, ics_dict, **encoding_kwargs)
+    else:
+        df = verify_df(df, encoding_kwargs['seq_col'], encoding_kwargs['hla_col'],
+                       encoding_kwargs['target_col'])
+        x, _ = get_dataset(df, ics_dict, **encoding_kwargs)
 
     # Take the first model in the list and get its class
     model_class = models[0].__class__

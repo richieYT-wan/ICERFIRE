@@ -71,9 +71,9 @@ VAL, N_CORES, DATADIR, AA_KEYS, CHAR_TO_INT, INT_TO_CHAR, BG, BL62FREQ, BL62FREQ
 
 def verify_df(df, seq_col, hla_col, target_col):
     df = copy.deepcopy(df)
-    unique_labels = sorted(df[target_col].dropna().unique())
-    # Checks binary label
-    assert ([int(x) for x in sorted(unique_labels)]) in [[0, 1], [0], [1]], f'Labels are not 0, 1! {unique_labels}'
+    # unique_labels = sorted(df[target_col].dropna().unique())
+    # # Checks binary label
+    # assert ([int(x) for x in sorted(unique_labels)]) in [[0, 1], [0], [1]], f'Labels are not 0, 1! {unique_labels}'
     # Checks if any seq not in alphabet
     try:
         df = df.drop(df.loc[df[seq_col].apply(lambda x: any([z not in AA_KEYS and not z == '-' for z in x]))].index)
@@ -321,13 +321,12 @@ def batch_find_extra_aa(core_seqs, icore_seqs):
 
 
 def encode_batch_weighted(df, ics_dict=None, max_len=None, encoding='onehot', blosum_matrix=None, seq_col='Peptide',
-                          hla_col='HLA', target_col='agg_label', mask=False, invert=False, threshold=.200):
+                          hla_col='HLA', mask=False, invert=False, threshold=.200):
     """
     Takes as input a df containing sequence, len, HLA;
     Batch onehot-encode all sequences & weights them with (1-IC) depending on the ICs dict given
 
     Args:
-        target_col:
         df (pandas.DataFrame): DF containing pep sequence, HLA, optionally 'len'
         ics_dict (dict): Dictionary containing the ICs
         max_len (int): Maximum length to consider
@@ -340,7 +339,6 @@ def encode_batch_weighted(df, ics_dict=None, max_len=None, encoding='onehot', bl
         weighted_sequence (numpy.array): Tensor containing the weighted onehot-encoded peptide sequences.
     """
 
-    df = verify_df(df, seq_col, hla_col, target_col)
     if seq_col == 'expanded_input':
         df['seq_len'] = df[seq_col].apply(lambda x: len(x) - x.count('-'))
     else:
@@ -371,7 +369,7 @@ def get_dataset(df, ics_dict, max_len=12, encoding='onehot', blosum_matrix=None,
     # df = verify_df(df, seq_col, hla_col, target_col)
 
     encoded_weighted, true_lens = encode_batch_weighted(df, ics_dict, max_len, encoding, blosum_matrix, seq_col,
-                                                        hla_col, target_col, mask, invert, threshold)
+                                                        hla_col, mask, invert, threshold)
     x = batch_compute_frequency(encoded_weighted, true_lens)
     if add_rank:
         ranks = np.expand_dims(df[rank_col].values, 1)
@@ -391,6 +389,34 @@ def get_dataset(df, ics_dict, max_len=12, encoding='onehot', blosum_matrix=None,
             x = np.concatenate([x, mut_scores], axis=1)
 
     return x, y
+
+
+def get_test_dataset(df, ics_dict, max_len=12, encoding='onehot', blosum_matrix=None, seq_col='icore_mut', hla_col='HLA',
+                     target_col='agg_label', rank_col='EL_rank_mut', mut_col=None, mask=False, invert=False, add_rank=False,
+                     threshold=.200):
+    """
+    """
+    # df = verify_df(df, seq_col, hla_col, target_col)
+
+    encoded_weighted, true_lens = encode_batch_weighted(df, ics_dict, max_len, encoding, blosum_matrix, seq_col,
+                                                        hla_col, mask, invert, threshold)
+    x = batch_compute_frequency(encoded_weighted, true_lens)
+    if add_rank:
+        ranks = np.expand_dims(df[rank_col].values, 1)
+        try:
+            x = np.concatenate([x, ranks], axis=1)
+        except:
+            print(rank_col, ranks.shape, x.shape)
+            print('\n\n\n', x[:5])
+            print('\n\n\n', ranks[:5])
+            raise ValueError
+
+    if mut_col is not None and type(mut_col) == list:
+        if len(mut_col) > 0:
+            mut_scores = df[mut_col].values
+            x = np.concatenate([x, mut_scores], axis=1)
+
+    return x
 
 
 def batch_compute_frequency(encoded_sequences, true_lens=None):

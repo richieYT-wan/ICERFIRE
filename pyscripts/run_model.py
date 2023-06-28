@@ -6,7 +6,11 @@ import argparse
 module_path = os.path.abspath(os.path.join('../..'))
 if module_path not in sys.path:
     sys.path.append(module_path)
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
 
+print(module_path, sys.path)
 from src.utils import pkl_load
 from src.train_eval import evaluate_trained_models
 from src.mutation_tools import pipeline_mutation_scores
@@ -24,6 +28,8 @@ def args_parser():
     parser.add_argument('-ae', '--add_expression', dest='add_expression', type=str2bool,
                         required=False, default=True,
                         help='Whether to use the model that includes expression as a feature')
+    parser.add_argument('-o', '--outdir', dest='outdir', type=str, required=False, default='../output/',
+                        help='Output directory')
     return parser.parse_args()
 
 
@@ -41,25 +47,30 @@ def main():
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
     # Load appropriate model
     # TODO: TRAIN/ADD MODEL W/O EXPRESSION
-    unpickle = pkl_load(f'{parent_dir}ICERFIRE_Expr{args["add_expression"]}.pkl')
+    unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
     data = pd.read_csv(args['filepath'], sep=' ')
-
+    # print(1, len(data))
     if args['add_expression'] and args['pepxpath'] is not None:
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
         data = pd.merge(data, pepx.rename(columns={'peptide': 'icore_wt_aligned'}), how='left',
                         left_on='icore_wt_aligned', right_on='icore_wt_aligned')
         data.fillna(data.median(skipna=True, numeric_only=True), inplace=True)
+    # print(2, len(data))
 
     data = pipeline_mutation_scores(data, 'icore_mut', 'icore_wt_aligned', ics,
-                                    threshold=kwargs['thershold'], prefix='icore_')
-    test_results, predictions = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, n_jobs=8)
+                                    threshold=kwargs['threshold'], prefix='icore_')
+    # print(3, len(data))
+
+    predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True, n_jobs=8)
     # Saving results as CSV table
+    # print(4, len(predictions))
     predictions.sort_values('Peptide', ascending=False).to_csv(f'{outdir}{run_name}_predictions.csv', index=False)
-    pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
-                                                                    [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
-                              .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
+    if test_results is not None:
+        pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
+                                                                        [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
+                                  .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
 
 
 if __name__ == '__main__':

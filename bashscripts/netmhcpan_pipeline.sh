@@ -1,15 +1,18 @@
-#! /usr/bin/bash
-DATADIR=/home/projects/vaccine/people/yatwan/netmhcpan/score_pipeline/data/
-OUTDIR=/home/projects/vaccine/people/yatwan/netmhcpan/score_pipeline/output/
+
+DATADIR=/home/projects/vaccine/people/yatwan/ICERFIRE/data/
+OUTDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/
 NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
 KERNDIST=/home/projects/vaccine/people/morni/bin/pep_kernel_dist
-# Assuming the input file is comma-separated txt file, without header or index,
+# Assuming the input file is comma-separated, without header or index,
 # with format
 # peptide,wildtype,hla,target
 # where target is optional
 
-input_file="${DATADIR}$1"
-final_fn=$(basename ${input_file})
+input_file="${DATADIR}${1}"
+filename=$(basename ${input_file})
+basenm="${filename%.*}"
+final_fn="${basenm}_scored_output"
+
 echo "#######################"
 echo "Processing ICOREs with NetMHCpan"
 echo "#######################"
@@ -17,11 +20,10 @@ echo "#######################"
 # loop over lines in input file
 line_number=1
 while IFS=',' read -r column1 column2 column3; do
-
   ########################
   #   PROCESSING mutant  #
   ########################
-  
+
 
   # create temporary file
   tmp_file_mut=$(mktemp)
@@ -108,11 +110,7 @@ done
 rm tmp1.pep tmp2.pep
 paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}.txt"
 rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
+awk -F ' ' 'NR>1 {print $12}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
 
-
-echo "#######################"
-echo "  Done Preprocessing"
-echo "  Running Model"
-echo "#######################"
 
 

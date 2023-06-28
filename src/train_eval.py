@@ -106,26 +106,34 @@ def nested_kcv_train(dataframe, base_model, ics_dict, encoding_kwargs: dict = No
 
 
 # EVAL WITH PARALLEL WRAPPER
-def parallel_eval_wrapper(test_dataframe, models_list, ics_dict, encoding_kwargs, fold_out, kcv_eval=False):
+def parallel_eval_wrapper(test_dataframe, models_list, ics_dict, encoding_kwargs, fold_out, test_mode=False,
+                          kcv_eval=False):
     # If no train dataframe provided and test_dataframe is partitioned,
     # It will eval on each of the folds
-    if kcv_eval or ('fold' in test_dataframe.columns and test_dataframe.equals(train_dataframe)):
+    if kcv_eval and 'fold' in test_dataframe.columns:
         test_df = test_dataframe.query('fold==@fold_out')
     else:
         test_df = test_dataframe.copy().reset_index(drop=True)
 
     # TODO: HERE NEED TO FIX BEHAVIOUR WHERE TARGET LABEL IS NOT PROVIDED
-    predictions_df = get_predictions(test_df, models_list, ics_dict, encoding_kwargs)
-    test_metrics = get_metrics(predictions_df[encoding_kwargs['target_col']].values,
-                               predictions_df['pred'].values)
+    # print(5, len(test_dataframe))
+    # print(6, len(test_df))
+    predictions_df = get_predictions(test_df, models_list, ics_dict, encoding_kwargs, test_mode).assign(fold=fold_out)
+    # print(7, len(predictions_df))
+    if encoding_kwargs['target_col'] in predictions_df.columns:
+        test_metrics = get_metrics(predictions_df[encoding_kwargs['target_col']].values,
+                                   predictions_df['pred'].values)
+    else:
+        test_metrics = None
     return predictions_df, test_metrics
 
 
-def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwargs: dict = None, n_jobs=None,
-                            kcv_eval=False):
+def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwargs: dict = None, test_mode=False,
+                            kcv_eval=False, n_jobs=None):
     """
 
     Args:
+        test_mode:
         test_dataframe:
         models_dict:
         ics_dict:
@@ -139,7 +147,7 @@ def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwar
     encoding_kwargs = assert_encoding_kwargs(encoding_kwargs, mode_eval=True)
     # Wrapper and parallel evaluation
     eval_wrapper_ = partial(parallel_eval_wrapper, test_dataframe=test_dataframe, ics_dict=ics_dict, kcv_eval=kcv_eval,
-                            encoding_kwargs=encoding_kwargs)
+                            encoding_kwargs=encoding_kwargs, test_mode=test_mode)
     n_jobs = len(models_dict.keys()) if (
                 n_jobs is None and len(models_dict.keys()) <= multiprocessing.cpu_count()) else n_jobs
     # TODO: HERE NEED TO FIX BEHAVIOUR WHERE TARGET LABEL IS NOT PROVIDED
@@ -150,13 +158,16 @@ def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwar
                                                                          position=2))
     predictions_df = [x[0] for x in output]
     # print('here', len(predictions_df), len(predictions_df[0]))
-    test_metrics = [x[1] for x in output]
-
-    test_results = {k: v for k, v in zip(models_dict.keys(), test_metrics)}
-
     # Here simply concatenates it to get all the predictions from the folds
-    predictions_df = pd.concat(predictions_df)
-    # Get the mean predictions
-    predictions_df = predictions_df.groupby([x for x in predictions_df.columns if x !='pred']).agg(mean_pred=('pred', 'mean')).reset_index()
 
-    return test_results, predictions_df
+    predictions_df = pd.concat(predictions_df)
+    print(8, len(predictions_df))
+    # Get the mean predictions
+    predictions_df = predictions_df.groupby(['Peptide', 'HLA', 'Core','icore_mut','fold']).agg(mean_pred=('pred', 'mean')).reset_index()
+    if encoding_kwargs['target_col'] in predictions_df.columns:
+        test_metrics = [x[1] for x in output]
+        test_results = {k: v for k, v in zip(models_dict.keys(), test_metrics)}
+    else:
+        test_results = None
+
+    return predictions_df, test_results
