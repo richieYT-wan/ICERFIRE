@@ -73,10 +73,6 @@ done < "$input_file"
 # Writing header and results to final output mut
 echo "icore_start_pos HLA Pep Core Of Gp Gl Ip Il icore_mut EL_rank_mut"> "${OUTDIR}final_output_mut.txt"
 cat "${OUTDIR}almostfinal_output_mut.txt" >> "${OUTDIR}final_output_mut.txt"
-#
-## Recovering the full peptide from the basefile
-##paste -d' ' "${OUTDIR}base_file.txt" "${OUTDIR}final_output_mut.txt" > "${OUTDIR}merged_output.txt"
-#paste -d' ' "${OUTDIR}base_file.txt" "${OUTDIR}final_output_mut.txt" > "${OUTDIR}final_output_mut_tmp.txt" && mv "${OUTDIR}final_output_mut_tmp.txt" "${OUTDIR}final_output_mut.txt"
 
 # Doing the same to final output WT
 echo "icore_wt_aligned EL_rank_wt_aligned" > "${OUTDIR}final_output_wt.txt"
@@ -84,6 +80,8 @@ cat "${OUTDIR}almostfinal_output_wt.txt" >> "${OUTDIR}final_output_wt.txt"
 
 # Pasting and saving final output
 paste -d' ' "${OUTDIR}final_output_mut.txt" "${OUTDIR}final_output_wt.txt" > "${OUTDIR}merged_output.txt"
+
+paste -d' ' "${OUTDIR}base_file.txt" "${OUTDIR}merged_output.txt" > "${OUTDIR}merged_final_output_tmp.txt" && mv "${OUTDIR}merged_final_output_tmp.txt" "${OUTDIR}merged_output.txt"
 
 # Deleting all temp files
 rm "${OUTDIR}almostfinal_output_wt.txt"
