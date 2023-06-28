@@ -110,15 +110,15 @@ fn=$(basename "${OUTDIR}merged_output.txt")
 echo "icore_similarity_score" > "${OUTDIR}${fn}.kerndist"
 for i in $(seq 2 $len1)
 do
-  awk -v line=$i 'FNR==line {print $10}' "${OUTDIR}merged_output.txt" > tmp1.pep
-  awk -v line=$i 'FNR==line {print $12}' "${OUTDIR}merged_output.txt" > tmp2.pep
+  awk -v line=$i 'FNR==line {print $11}' "${OUTDIR}merged_output.txt" > tmp1.pep
+  awk -v line=$i 'FNR==line {print $13}' "${OUTDIR}merged_output.txt" > tmp2.pep
    ${KERNDIST} -kmin 3 -kmax 8 ./tmp1.pep ./tmp2.pep | tail -n 1 | awk '{print $3}' | awk 'NR == 1 {print $1}' >> "${OUTDIR}${fn}.kerndist"
   #{origin = $1} {$1 = $origin; print}
 done
 rm tmp1.pep tmp2.pep
 paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}.txt"
 rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
-awk -F ' ' 'NR>1 {print $12}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
+awk -F ' ' 'NR>1 {print $13}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
 
 
 
