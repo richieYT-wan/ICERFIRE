@@ -39,7 +39,8 @@ def main():
     run_dt = get_datetime_string()
     run_id = get_random_id(6)
     run_tag = 'AddExpr' if args['add_expression'] else 'NoExpr'
-    run_name = f'{run_dt}_{run_tag}_{run_id}'
+    basename = os.path.basename(args['filepath'].split('.')[0])
+    run_name = f'{run_dt}_{basename}_{run_tag}_{run_id}'
     outdir = os.path.join(args['outdir'], f'{run_name}/')
     mkdirs(outdir)
 
