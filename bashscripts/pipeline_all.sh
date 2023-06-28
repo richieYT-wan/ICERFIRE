@@ -27,6 +27,11 @@ echo "#######################"
 echo "Here running PepX"
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
 
+
+#sh netmhcpan_pipeline.sh /home/projects/vaccine/people/yatwan/ICERFIRE/data/test_data/sample_data.txt
+#sh query_pepx.sh /home/projects/vaccine/people/yatwan/ICERFIRE/tmp/sample_data_scored_output_wt_icore.txt
+
+
 cd ${PYDIR}
 echo " "
 echo "#######################"

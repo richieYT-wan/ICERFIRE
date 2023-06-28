@@ -31,7 +31,7 @@ query="$query order by peptide asc;"
 
 echo "Running PepX query on ${1}"
 sqlite3 $database -header "$query" > "${TMPDIR}${output_file}.csv"
-echo "Query done ; Updating table format and removing temporary files"
+echo "Query done ; Updating table format and moving temporary files"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
