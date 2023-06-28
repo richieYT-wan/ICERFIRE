@@ -1,3 +1,4 @@
+#! /usr/bin/bash
 
 DATADIR=/home/projects/vaccine/people/yatwan/ICERFIRE/data/
 OUTDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/

@@ -1,5 +1,5 @@
-#!/bin/bash
-set -x
+#! /usr/bin/bash
+#set -x
 # sqlite> select * from expression_dataset where source like '%TCGA%' and title like '%PANCAN%';
 # 1|TCGA|cancer-type|PANCAN|TCGA-PANCAN RNA expression|1|0| 
 # TCGA pancan's dataset_id is 1 so here dataset_id=1 by default ; Can / will change behaviour if we start using other datasets

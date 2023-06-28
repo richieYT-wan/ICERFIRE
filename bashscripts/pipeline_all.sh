@@ -1,8 +1,5 @@
 #! /usr/bin/bash
 
-source /home/projects/vaccine/people/yatwan/anaconda3/etc/profile.d/conda.sh
-source activate pynn
-
 FILENAME=${1}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
@@ -32,6 +29,8 @@ sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
 #sh query_pepx.sh /home/projects/vaccine/people/yatwan/ICERFIRE/tmp/sample_data_scored_output_wt_icore.txt
 
 
+source /home/projects/vaccine/people/yatwan/anaconda3/etc/profile.d/conda.sh
+source activate pynn
 cd ${PYDIR}
 echo " "
 echo "#######################"
