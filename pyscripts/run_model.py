@@ -10,7 +10,7 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-print(module_path, sys.path)
+# print(module_path, sys.path)
 from src.utils import pkl_load
 from src.train_eval import evaluate_trained_models
 from src.mutation_tools import pipeline_mutation_scores

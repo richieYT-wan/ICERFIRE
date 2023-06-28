@@ -37,4 +37,4 @@ echo "#######################"
 echo " Running Model"
 echo "#######################"
 python3 run_model.py -f "${TMP}${final_fn}.txt" -pf "${TMP}${final_fn}_wt_icore_pepx_output.csv"
-rm ${TMP}/*
+#rm ${TMP}/*
