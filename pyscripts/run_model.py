@@ -61,6 +61,7 @@ def main():
 
     data = pipeline_mutation_scores(data, 'icore_mut', 'icore_wt_aligned', ics,
                                     threshold=kwargs['threshold'], prefix='icore_')
+    data['seq_id'] = [f'seq_{i}' for i in range(1,len(data)+1)]
     # print(3, len(data))
 
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True, n_jobs=8)
