@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # sqlite> select * from expression_dataset where source like '%TCGA%' and title like '%PANCAN%';
 # 1|TCGA|cancer-type|PANCAN|TCGA-PANCAN RNA expression|1|0| 
 # TCGA pancan's dataset_id is 1 so here dataset_id=1 by default ; Can / will change behaviour if we start using other datasets
@@ -29,7 +29,7 @@ query="$query dataset_id = $dataset_id"
 query="$query and peptide in (\"$peptide_string\")"
 query="$query order by peptide asc;"
 
-echo "Running PepX query on ${1}"
+echo "Running PepX query on ${1}, from ${database}, saving at ${output_file}"
 sqlite3 $database -header "$query" > "${TMPDIR}${output_file}.csv"
 echo "Query done ; Updating table format and moving temporary files"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
