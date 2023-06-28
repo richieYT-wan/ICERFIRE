@@ -1,7 +1,7 @@
 #! /usr/bin/bash
 
 source /home/projects/vaccine/people/yatwan/anaconda3/etc/profile.d/conda.sh
-source activate phd
+source activate pynn
 
 FILENAME=${1}
 filename=$(basename ${FILENAME})
@@ -17,7 +17,17 @@ PEPXDIR="${USERDIR}pepx/"
 PYDIR="${USERDIR}ICERFIRE/pyscripts/"
 
 sh netmhcpan_pipeline.sh ${FILENAME}
+
+echo " "
+echo "#######################"
+echo "Processing PepX score"
+echo "#######################"
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
+
 cd ${PYDIR}
+echo " "
+echo "#######################"
+echo " Running Model"
+echo "#######################"
 python3 run_model.py -f "${TMP}${final_fn}.txt" -pf "${TMP}${final_fn}_wt_icore_pepx_output.csv"
-rm ${TMP}/*
+#rm ${TMP}/*
