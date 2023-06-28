@@ -7,8 +7,8 @@ FILENAME=${1}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
-USERDIR=/home/projects/vaccine/people/yatwan/
-#USERDIR=/Users/riwa/Documents/code/
+USERDIR=/home/projects/vaccine/people/yatwan/ #USERDIR=/Users/riwa/Documents/code/
+BASHDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/bashscripts/
 DATADIR="${USERDIR}ICERFIRE/data/"
 TMP="${USERDIR}ICERFIRE/tmp/"
 NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
@@ -16,12 +16,14 @@ KERNDIST=/home/projects/vaccine/people/morni/bin/pep_kernel_dist
 PEPXDIR="${USERDIR}pepx/"
 PYDIR="${USERDIR}ICERFIRE/pyscripts/"
 
+cd ${BASHDIR}
 sh netmhcpan_pipeline.sh ${FILENAME}
 
 echo " "
 echo "#######################"
 echo "Processing PepX score"
 echo "#######################"
+
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
 
 cd ${PYDIR}

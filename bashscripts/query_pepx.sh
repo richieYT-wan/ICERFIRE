@@ -13,6 +13,7 @@ fi
 PEPXDIR='/home/projects/vaccine/people/yatwan/pepx/'
 TMPDIR='/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/'
 filepath=$1
+echo "Running PepX on ${1}"
 dataset_id=1
 filename=$(basename "$filepath")
 basenm="${filename%.*}"
