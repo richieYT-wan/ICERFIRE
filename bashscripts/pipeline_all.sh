@@ -1,8 +1,7 @@
 #! /usr/bin/bash
 
 FILENAME=${1}
-input_file="${DATADIR}${1}"
-filename=$(basename ${input_file})
+filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
 USERDIR=/home/projects/vaccine/people/yatwan/

@@ -7,8 +7,8 @@ KERNDIST=/home/projects/vaccine/people/morni/bin/pep_kernel_dist
 # with format
 # peptide,wildtype,hla,target
 # where target is optional
-mkdir -p OUTDIR
-input_file="${DATADIR}${1}"
+mkdir -p ${OUTDIR}
+input_file=${1}
 filename=$(basename ${input_file})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
