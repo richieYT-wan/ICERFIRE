@@ -19,6 +19,9 @@ basenm="${filename%.*}"
 database="${PEPXDIR}pepx-export.db"
 output_file="${basenm}_pepx_output"
 
+echo "#######################"
+echo "Processing PepX score"
+echo "#######################"
 peptide_string=`cat $filepath | perl -ne 'while(<>){chomp; push @all, $_;} print join("\",\"",@all)'`
 
 # Select only those fields, from the peptide_gene_tpms_collapsed table where dataset_id = 1 (id_1 == TCGA_PANCAN)

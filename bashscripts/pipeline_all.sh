@@ -19,5 +19,5 @@ PYDIR="${USERDIR}ICERFIRE/pyscripts/"
 sh netmhcpan_pipeline.sh ${FILENAME}
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
 cd ${PYDIR}
-python3 run_model.py -f "${TMP}${final_fn}.txt" -pf "${TMP}${final_fn}_wt_icore_pepx_output.txt"
+python3 run_model.py -f "${TMP}${final_fn}.txt" -pf "${TMP}${final_fn}_wt_icore_pepx_output.csv"
 rm ${TMP}/*
