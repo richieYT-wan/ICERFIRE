@@ -7,8 +7,9 @@ FILENAME=${1}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
-USERDIR=/home/projects/vaccine/people/yatwan/ #USERDIR=/Users/riwa/Documents/code/
+USERDIR=/home/projects/vaccine/people/yatwan/
 BASHDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/bashscripts/
+#USERDIR=/Users/riwa/Documents/code/
 DATADIR="${USERDIR}ICERFIRE/data/"
 TMP="${USERDIR}ICERFIRE/tmp/"
 NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
@@ -23,7 +24,7 @@ echo " "
 echo "#######################"
 echo "Processing PepX score"
 echo "#######################"
-
+echo "Here running PepX"
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
 
 cd ${PYDIR}
