@@ -163,7 +163,7 @@ def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwar
     predictions_df = pd.concat(predictions_df)
     print(8, len(predictions_df))
     # Get the mean predictions
-    predictions_df = predictions_df.groupby(['Peptide', 'HLA', 'Core','icore_mut']).agg(mean_pred=('pred', 'mean')).reset_index()
+    predictions_df = predictions_df.groupby(['Peptide', 'HLA']).agg(mean_pred=('pred', 'mean')).reset_index()
     if encoding_kwargs['target_col'] in predictions_df.columns:
         test_metrics = [x[1] for x in output]
         test_results = {k: v for k, v in zip(models_dict.keys(), test_metrics)}

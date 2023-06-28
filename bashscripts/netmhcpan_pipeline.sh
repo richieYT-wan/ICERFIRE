@@ -18,6 +18,9 @@ echo "#######################"
 echo "Processing ICOREs with NetMHCpan"
 echo "#######################"
 
+# Saving the Peptides to a newfile to be used later
+
+echo "Peptide" > "${OUTDIR}base_file.txt"
 # loop over lines in input file
 line_number=1
 while IFS=',' read -r column1 column2 column3; do
@@ -31,6 +34,8 @@ while IFS=',' read -r column1 column2 column3; do
   # write first column to temporary file
   echo ">seq$line_number" > "$tmp_file_mut"
   echo "$column1" >> "$tmp_file_mut"
+  # Save the peps to the base file used to re-cover the full peptides
+  echo "$column1" >> "${OUTDIR}base_file.txt"
 
   # run program with temporary file and second column as arguments
   ${NETMHCPAN} -l 8,9,10,11,12 -f "$tmp_file_mut" -a "$column3" -s > "${OUTDIR}output_tmp_mut.txt"
@@ -66,8 +71,12 @@ done < "$input_file"
 
 
 # Writing header and results to final output mut
-echo "icore_start_pos HLA Peptide Core Of Gp Gl Ip Il icore_mut EL_rank_mut"> "${OUTDIR}final_output_mut.txt"
+echo "icore_start_pos HLA Pep Core Of Gp Gl Ip Il icore_mut EL_rank_mut"> "${OUTDIR}final_output_mut.txt"
 cat "${OUTDIR}almostfinal_output_mut.txt" >> "${OUTDIR}final_output_mut.txt"
+
+# Recovering the full peptide from the basefile
+#paste -d' ' "${OUTDIR}base_file.txt" "${OUTDIR}final_output_mut.txt" > "${OUTDIR}merged_output.txt"
+paste -d' ' "${OUTDIR}base_file.txt" "${OUTDIR}final_output_mut.txt" > "${OUTDIR}final_output_mut_tmp.txt" && mv "${OUTDIR}final_output_mut_tmp.txt" "${OUTDIR}final_output_mut.txt"
 
 # Doing the same to final output WT
 echo "icore_wt_aligned EL_rank_wt_aligned" > "${OUTDIR}final_output_wt.txt"
@@ -83,6 +92,7 @@ rm "${OUTDIR}final_output_wt.txt"
 rm "${OUTDIR}final_output_mut.txt"
 rm "${OUTDIR}output_tmp_mut.txt"
 rm "${OUTDIR}output_tmp_wt.txt"
+rm "${OUTDIR}base_file.txt"
 
 
 echo " "
