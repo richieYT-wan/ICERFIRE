@@ -2,7 +2,6 @@ import copy
 
 import pandas as pd
 import numpy as np
-import torch
 import multiprocessing
 import math
 from src.utils import pkl_load
@@ -427,23 +426,13 @@ def batch_compute_frequency(encoded_sequences, true_lens=None):
     Returns:
 
     """
-    # old stuff
-    # if type(onehot_sequences) == np.ndarray:
-    #     return np.stack([compute_frequency(x) for x in onehot_sequences])
-    # elif type(onehot_sequences) == torch.Tensor:
-    #     return torch.stack([compute_frequency(x) for x in onehot_sequences])
-
-    # THIS IS THE OLD WAY WITH BINCOUNT WHICH ONLY WORKS WITH ONE HOT ENCODING
-    # non_zeros = onehot_sequences.nonzero()
-    # true_lens = np.expand_dims(np.bincount(non_zeros[0]), 1) if type(onehot_sequences) == np.ndarray \
-    #     else torch.bincount(non_zeros[:, 0]).unsqueeze(1)
-
     # This is the new way with mask and .all(dim=2) which works with both BLOSUM and OH
     if true_lens is None:
         mask = (encoded_sequences == 0).all(2)  # checking on second dim that every entry == 0
-        true_lens = (mask.shape[1] - torch.bincount(torch.where(mask)[0])).unsqueeze(1) if type(
-            mask) == torch.Tensor else \
-            np.expand_dims(mask.shape[1] - np.bincount(np.where(mask)[0]), 1)
+        # true_lens = (mask.shape[1] - torch.bincount(torch.where(mask)[0])).unsqueeze(1) if type(
+        #     mask) == torch.Tensor else \
+        #     np.expand_dims(mask.shape[1] - np.bincount(np.where(mask)[0]), 1)
+        true_lens = np.expand_dims(mask.shape[1] - np.bincount(np.where(mask)[0]), 1)
         frequencies = encoded_sequences.sum(axis=1) / true_lens
     else:
         frequencies = encoded_sequences.sum(axis=1) / np.repeat(true_lens, axis=0, repeats=20).reshape(len(true_lens),
