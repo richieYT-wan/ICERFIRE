@@ -12,8 +12,7 @@ TMP="${USERDIR}ICERFIRE/tmp/"
 NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
 KERNDIST=/home/projects/vaccine/people/morni/bin/pep_kernel_dist
 PEPXDIR="${USERDIR}pepx/"
-PYDIR=/home
+PYDIR="${USERDIR}ICERFIRE/pyscripts/"
+
 sh netmhcpan_pipeline.sh ${FILENAME}
 sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
-
-python3

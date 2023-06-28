@@ -7,7 +7,7 @@ KERNDIST=/home/projects/vaccine/people/morni/bin/pep_kernel_dist
 # with format
 # peptide,wildtype,hla,target
 # where target is optional
-
+mkdir -p OUTDIR
 input_file="${DATADIR}${1}"
 filename=$(basename ${input_file})
 basenm="${filename%.*}"
@@ -80,8 +80,8 @@ rm "${OUTDIR}almostfinal_output_wt.txt"
 rm "${OUTDIR}almostfinal_output_mut.txt"
 rm "${OUTDIR}final_output_wt.txt"
 rm "${OUTDIR}final_output_mut.txt"
-rm output_tmp_mut.txt
-rm output_tmp_wt.txt
+rm "${OUTDIR}output_tmp_mut.txt"
+rm "${OUTDIR}output_tmp_wt.txt"
 
 
 echo " "

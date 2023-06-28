@@ -33,3 +33,4 @@ sqlite3 $database -header "$query" > "${TMPDIR}${output_file}.csv"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
+rm $1
