@@ -2,9 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.DS_Store
 # C extensions
 *.so
+
 
 # Distribution / packaging
 .Python
@@ -152,3 +153,7 @@ cython_debug/
 #.idea/
 Untitled.ipynb
 saved_models/ICERFIRE_ExprTrue.pkl
+output/.DS_Store
+.DS_Store
+.DS_Store
+output/.DS_Store
