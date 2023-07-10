@@ -38,7 +38,7 @@ if [ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; then
 elif [ "$USER_EXPR" = "true" ]; then
   # TODO: Here merge user expr (4th column) to the file
   echo 'total_gene_tpm' > "${TMP}{final_fn}_tmp_expr.txt"
-  awk -F ',' 'BEGIN{OFS=","} {print $4}' sample_data_expr.txt >> "${TMP}${final_fn}_expr.txt"
+  awk -F ',' 'BEGIN{OFS=","} {print $4}' ${FILENAME} >> "${TMP}${final_fn}_expr.txt"
   paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
 elif [ "$ADD_EXPR" = "false" ];then
   echo "User-provided expression values or no expression added ; Skipping PepX query"
@@ -52,3 +52,4 @@ echo "#######################"
 echo " Running Model"
 echo "#######################"
 $PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR"
+#rm "${TMP}*data_scored_output*"
