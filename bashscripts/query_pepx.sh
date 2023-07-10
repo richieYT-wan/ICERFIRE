@@ -10,8 +10,11 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-PEPXDIR='/home/projects/vaccine/people/yatwan/pepx/'
-TMPDIR='/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/'
+# PEPXDIR='/home/projects/vaccine/people/yatwan/pepx/'
+# TMPDIR='/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/'
+PEPXDIR='/home/databases/userdb/pepx/'
+TMPDIR='/tools/src/ICERFIRE-1.0/tmp/'
+
 filepath=$1
 dataset_id=1
 filename=$(basename "$filepath")
@@ -36,3 +39,4 @@ echo "Query done ; Updating table format and moving temporary files"
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
 echo "Saved at ${TMPDIR}${output_file}.csv"
+

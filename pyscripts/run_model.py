@@ -28,7 +28,7 @@ def args_parser():
     parser.add_argument('-ae', '--add_expression', dest='add_expression', type=str2bool,
                         required=False, default=True,
                         help='Whether to use the model that includes expression as a feature')
-    parser.add_argument('-o', '--outdir', dest='outdir', type=str, required=False, default='../output/',
+    parser.add_argument('-o', '--outdir', dest='outdir', type=str, required=False, default='../tmp/',
                         help='Output directory')
     return parser.parse_args()
 
