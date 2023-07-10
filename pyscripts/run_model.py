@@ -39,7 +39,8 @@ def main():
     run_dt = get_datetime_string()
     run_id = get_random_id(6)
     run_tag = 'AddExpr' if args['add_expression'] else 'NoExpr'
-    basename = os.path.basename(args['filepath'].split('.')[0])
+    basename = os.path.basename(args['filepath']).split('.')[0]
+    print(basename)
     run_name = f'{run_dt}_{basename}_{run_tag}_{run_id}'
     outdir = os.path.join(args['outdir'], f'{run_name}/')
     mkdirs(outdir)
@@ -68,7 +69,7 @@ def main():
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True, n_jobs=8)
     # Saving results as CSV table
     # print(4, len(predictions))
-    predictions.sort_values('Peptide', ascending=False).to_csv(f'{outdir}{run_name}_predictions.csv', index=False)
+    predictions.sort_values('Peptide', ascending=True).to_csv(f'{outdir}{run_name}_predictions.csv', index=False)
     if test_results is not None:
         pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
                                                                         [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\

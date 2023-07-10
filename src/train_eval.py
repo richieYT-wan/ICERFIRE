@@ -149,7 +149,7 @@ def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwar
     eval_wrapper_ = partial(parallel_eval_wrapper, test_dataframe=test_dataframe, ics_dict=ics_dict, kcv_eval=kcv_eval,
                             encoding_kwargs=encoding_kwargs, test_mode=test_mode)
     n_jobs = len(models_dict.keys()) if (
-                n_jobs is None and len(models_dict.keys()) <= multiprocessing.cpu_count()) else n_jobs
+            n_jobs is None and len(models_dict.keys()) <= multiprocessing.cpu_count()) else n_jobs
     # TODO: HERE NEED TO FIX BEHAVIOUR WHERE TARGET LABEL IS NOT PROVIDED
     output = Parallel(n_jobs=n_jobs)(delayed(eval_wrapper_)(fold_out=fold_out, models_list=models_list) \
                                      for (fold_out, models_list) in tqdm(models_dict.items(),
@@ -169,5 +169,7 @@ def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwar
         test_results = {k: v for k, v in zip(models_dict.keys(), test_metrics)}
     else:
         test_results = None
-
+    predictions_df = pd.merge(test_dataframe, predictions_df, left_on=['Peptide', 'HLA', 'seq_id'],
+                              right_on=['Peptide', 'HLA', 'seq_id']) \
+        .sort_values('seq_id', ascending=True).drop(columns=['seq_id'])
     return predictions_df, test_results
