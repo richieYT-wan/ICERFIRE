@@ -19,7 +19,7 @@ TMP="${USERDIR}ICERFIRE-1.0/tmp/"
 NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 KERNDIST="${USERDIR}/bin/pep_kernel_dist"
 PEPXDIR="/home/databases/userdb/pepx/"
-PYTHON="/home/ctools/opt/anaconda3_202105/bin/python"
+PYTHON="/home/ctools/opt/anaconda3_202105/bin/python3"
 PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
 # Go to the bashdir and run the bash commands
