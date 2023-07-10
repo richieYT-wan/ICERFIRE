@@ -14,6 +14,7 @@ fi
 # TMPDIR='/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/'
 PEPXDIR='/home/databases/userdb/pepx/'
 TMPDIR='/tools/src/ICERFIRE-1.0/tmp/'
+SQLITE='/tools/src/ICERFIRE-1.0/bin/sqlite3'
 
 filepath=$1
 dataset_id=1
@@ -33,7 +34,7 @@ query="$query and peptide in (\"$peptide_string\")"
 query="$query order by peptide asc;"
 
 echo "Running PepX query on ${1}"
-sqlite3 $database -header "$query" > "${TMPDIR}${output_file}.csv"
+$SQLITE $database -header "$query" > "${TMPDIR}${output_file}.csv"
 echo "Query done ; Updating table format and moving temporary files"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
