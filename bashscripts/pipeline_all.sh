@@ -1,9 +1,10 @@
 #! /usr/bin/bash
 
 # TODO: Remove these placeholders as I only used them to test my script
+
+FILENAME=${1}
 USER_EXPR=${2}
 ADD_EXPR=${3}
-FILENAME=${1}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
@@ -28,19 +29,19 @@ sh netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 # TODO: USER_EXPR should come from a checkbox in the front end (asking whether the user is providing expr values, false by default)
 # TODO: ADD_EXPR should come from a checkbox in the front end (Asking whether expression should be added to the model)
 # TODO: ADD_EXPR should be checked / true by default in the front end.
-if [ "$USER_EXPR" = false ] && [ "$ADD_EXPR" = true ]; then
+if [ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; then
   echo " "
   echo "#######################"
   echo "Processing PepX score"
   echo "#######################"
   sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
   PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
-elif [ "$USER_EXPR" = true ]; then
+elif [ "$USER_EXPR" = "true" ]; then
   # TODO: Here merge user expr (4th column) to the file
   echo 'total_gene_tpm' > "${TMP}{final_fn}_tmp_expr.txt"
   awk -F ',' 'BEGIN{OFS=","} {print $4}' sample_data_expr.txt >> "${TMP}${final_fn}_expr.txt"
   paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
-elif [ "$ADD_EXPR" = false ];then
+elif [ "$ADD_EXPR" = "false" ];then
   echo "User-provided expression values or no expression added ; Skipping PepX query"
   PF="None"
 fi
