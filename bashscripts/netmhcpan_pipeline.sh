@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! /bin/bash
 
 
 # Assuming the input file is comma-separated, without header or index,
