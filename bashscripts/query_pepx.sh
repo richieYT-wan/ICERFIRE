@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! /bin/bash
 #set -x
 # sqlite> select * from expression_dataset where source like '%TCGA%' and title like '%PANCAN%';
 # 1|TCGA|cancer-type|PANCAN|TCGA-PANCAN RNA expression|1|0| 

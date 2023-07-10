@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! /bin/bash
 
 # TODO: Remove these placeholders as I only used them to test my script
 
@@ -24,7 +24,7 @@ PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
-sh netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
+bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 
 # TODO: USER_EXPR should come from a checkbox in the front end (asking whether the user is providing expr values, false by default)
 # TODO: ADD_EXPR should come from a checkbox in the front end (Asking whether expression should be added to the model)
@@ -34,7 +34,7 @@ if [ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; then
   echo "#######################"
   echo "Processing PepX score"
   echo "#######################"
-  sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
+  bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
   PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
 elif [ "$USER_EXPR" = "true" ]; then
   # TODO: Here merge user expr (4th column) to the file
