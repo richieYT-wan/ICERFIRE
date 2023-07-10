@@ -10,8 +10,8 @@ basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
 
 # USERDIR=/home/projects/vaccine/people/yatwan/
-USERDIR="/tools/src/ICERFIRE/"
-BASHDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/bashscripts/
+USERDIR="/tools/src/"
+BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 #USERDIR=/Users/riwa/Documents/code/
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
 TMP="${USERDIR}ICERFIRE-1.0/tmp/"
