@@ -13,14 +13,14 @@ final_fn="${basenm}_scored_output"
 USERDIR="/tools/src/ICERFIRE/"
 BASHDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/bashscripts/
 #USERDIR=/Users/riwa/Documents/code/
-DATADIR="${USERDIR}ICERFIRE/data/"
-TMP="${USERDIR}ICERFIRE/tmp/PATHTONEWTMP"
+DATADIR="${USERDIR}ICERFIRE-1.0/data/"
+TMP="${USERDIR}ICERFIRE-1.0/tmp/"
 #NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
 NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 KERNDIST="${USERDIR}/bin/pep_kernel_dist"
 PEPXDIR="/home/databases/userdb/pepx/"
 PYTHON="/home/ctools/opt/anaconda3_202105/bin/python"
-PYDIR="${USERDIR}ICERFIRE/pyscripts/"
+PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
