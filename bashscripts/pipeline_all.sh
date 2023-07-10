@@ -1,5 +1,4 @@
 #! /bin/bash
-
 # TODO: Remove these placeholders as I only used them to test my script
 
 FILENAME=${1}
