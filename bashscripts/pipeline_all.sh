@@ -1,5 +1,8 @@
 #! /usr/bin/bash
 
+# TODO: Remove these placeholders as I only used them to test my script
+USER_EXPR=${2}
+ADD_EXPR=${3}
 FILENAME=${1}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
@@ -18,9 +21,6 @@ PEPXDIR="/home/databases/userdb/pepx/"
 PYTHON="/home/ctools/opt/anaconda3_202105/bin/python"
 PYDIR="${USERDIR}ICERFIRE/pyscripts/"
 
-# TODO: Remove these placeholders as I only used them to test my script
-USER_EXPR=${2}
-ADD_EXPR=${3}
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
 sh netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
