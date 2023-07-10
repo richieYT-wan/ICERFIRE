@@ -1,19 +1,21 @@
 #! /usr/bin/bash
 
+
+# Assuming the input file is comma-separated, without header or index,
+# with format
+# peptide,wildtype,hla,target
+# where target is optional
+
+input_file=${1}
+filename=$(basename ${input_file})
+basenm="${filename%.*}"
+final_fn="${basenm}_scored_output"
+
 # TODO: HERE PATHS ARE TO BE REPLACED BY /tools/src/ICERFIRE-1.0/
 OUTDIR=${2}
 # TODO: HERE PATH IS TO BE REPLACED BY THE PATH TO NETMHCPAN4-1 (command line) in HealthTechCluster
 NETMHCPAN=${3}
 KERNDIST=${4}
-# Assuming the input file is comma-separated, without header or index,
-# with format
-# peptide,wildtype,hla,target
-# where target is optional
-mkdir -p ${OUTDIR}
-input_file=${1}
-filename=$(basename ${input_file})
-basenm="${filename%.*}"
-final_fn="${basenm}_scored_output"
 
 echo "#######################"
 echo "Processing ICOREs with NetMHCpan"
