@@ -35,7 +35,10 @@ if [ "$USER_EXPR" = false ] && [ "$ADD_EXPR" = true ]; then
   echo "#######################"
   sh query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
   PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
-else
+elif [ "$USER_EXPR" = true ]; then
+  # TODO: Here merge user expr (4th column) to the file
+  echo "xd"
+elif [ "$ADD_EXPR" = false ];then
   echo "User-provided expression values or no expression added ; Skipping PepX query"
   PF="None"
 fi
