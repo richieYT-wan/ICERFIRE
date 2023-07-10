@@ -1,9 +1,10 @@
 #! /usr/bin/bash
 
-DATADIR=/home/projects/vaccine/people/yatwan/ICERFIRE/data/
-OUTDIR=/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/
-NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
-KERNDIST=/home/projects/vaccine/people/morni/bin/pep_kernel_dist
+# TODO: HERE PATHS ARE TO BE REPLACED BY /tools/src/ICERFIRE-1.0/
+OUTDIR=${2}
+# TODO: HERE PATH IS TO BE REPLACED BY THE PATH TO NETMHCPAN4-1 (command line) in HealthTechCluster
+NETMHCPAN=${3}
+KERNDIST=${4}
 # Assuming the input file is comma-separated, without header or index,
 # with format
 # peptide,wildtype,hla,target

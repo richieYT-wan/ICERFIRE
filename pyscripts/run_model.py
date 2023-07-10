@@ -52,7 +52,7 @@ def main():
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
     data = pd.read_csv(args['filepath'], sep=' ')
     # print(1, len(data))
-    if args['add_expression'] and args['pepxpath'] is not None:
+    if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath']!="None":
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
         data = pd.merge(data, pepx.rename(columns={'peptide': 'icore_wt_aligned'}), how='left',
