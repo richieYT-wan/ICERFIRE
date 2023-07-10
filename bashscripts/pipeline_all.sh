@@ -36,12 +36,13 @@ if [ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; then
   bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
   PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
 elif [ "$USER_EXPR" = "true" ]; then
+  echo "User-provided expression values; Skipping PepX query"
   # TODO: Here merge user expr (4th column) to the file
   echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-  awk -F ',' 'BEGIN{OFS=","} {print $4}' ${FILENAME} >> "${TMP}${final_fn}_expr.txt"
+  awk -F ',' '{print $4}' ${FILENAME} >> "${TMP}${final_fn}_tmp_expr.txt"
   paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
 elif [ "$ADD_EXPR" = "false" ];then
-  echo "User-provided expression values or no expression added ; Skipping PepX query"
+  echo "No expression added ; Skipping PepX query"
   PF="None"
 fi
 
@@ -52,4 +53,4 @@ echo "#######################"
 echo " Running Model"
 echo "#######################"
 $PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR"
-#rm "${TMP}*data_scored_output*"
+#rm "${TMP}*scored_output*"
