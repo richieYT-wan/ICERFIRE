@@ -52,24 +52,22 @@ def main():
     unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
     data = pd.read_csv(args['filepath'], sep=' ')
-    # print(1, len(data))
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath']!="None":
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
         data = pd.merge(data, pepx.rename(columns={'peptide': 'icore_wt_aligned'}), how='left',
                         left_on='icore_wt_aligned', right_on='icore_wt_aligned')
         data.fillna(data.median(skipna=True, numeric_only=True), inplace=True)
-    # print(2, len(data))
 
     data = pipeline_mutation_scores(data, 'icore_mut', 'icore_wt_aligned', ics,
                                     threshold=kwargs['threshold'], prefix='icore_')
     data['seq_id'] = [f'seq_{i}' for i in range(1,len(data)+1)]
-    # print(3, len(data))
-
+    cols_to_save = ['Peptide', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut', 'EL_rank_wt_aligned']
+    cols_to_save = cols_to_save + kwargs['mut_col'] + ['mean_pred']
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True, n_jobs=8)
     # Saving results as CSV table
-    # print(4, len(predictions))
-    predictions.sort_values('Peptide', ascending=True).to_csv(f'{outdir}{run_name}_predictions.csv', index=False)
+    predictions.sort_values('Peptide', ascending=True).to_csv(f'{outdir}{run_name}_predictions.csv',
+                                                              columns=cols_to_save, index=False)
     if test_results is not None:
         pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
                                                                         [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
