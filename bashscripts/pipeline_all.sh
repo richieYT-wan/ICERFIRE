@@ -8,9 +8,7 @@
 ###############################################################################
 
 # determine where to store temporary files (must be writable to all users)
-if [ -z "$TMPDIR" ]; then
-	export TMPDIR=/scratch
-fi
+
 # Or maybe override
 #export TMPDIR=/scratch
 
@@ -31,7 +29,9 @@ SERVICEPATH=/services/ICERFIRE-1.0
 # other settings
 PLATFORM="${UNIX}_${AR}"
 
-
+if [ -z "$TMPDIR" ]; then
+	export TMPDIR=/scratch
+fi
 #[ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; th
 # Expanding on blastdb
 options=()
@@ -79,13 +79,10 @@ final_fn="${basenm}_scored_output"
 mkdir -p ${WWWROOT}${SERVICEPATH}/tmp/${JOBID}
 mkdir -p /tmp/${JOBID}
 
-# USERDIR=/home/projects/vaccine/people/yatwan/
 USERDIR="/tools/src/"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
-#USERDIR=/Users/riwa/Documents/code/
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
 TMP="${USERDIR}ICERFIRE-1.0/tmp/"
-#NETMHCPAN=/home/projects/vaccine/people/morni/netMHCpan-4.1/netMHCpan
 NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
 PEPXDIR="/home/databases/userdb/pepx/"
@@ -94,7 +91,7 @@ PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
-bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
+bash netmhcpan_pipeline.sh ${FILENAME} ${TMPDIR} ${NETMHCPAN} ${KERNDIST}
 
 # TODO: USER_EXPR should come from a checkbox in the front end (asking whether the user is providing expr values, false by default)
 # TODO: ADD_EXPR should come from a checkbox in the front end (Asking whether expression should be added to the model)
