@@ -1,12 +1,83 @@
-#! /bin/bash
-# TODO: Remove these placeholders as I only used them to test my script
+#!/bin/bash
+
+# This the main ICERFIRE-1.0 script. It acts as the full pipeline, doing the NetMHCpan, KernDist, PepX query, and Python script
+# Yat, Jul 2023
+
+###############################################################################
+#               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
+###############################################################################
+
+# determine where to store temporary files (must be writable to all users)
+if [ -z "$TMPDIR" ]; then
+	export TMPDIR=/scratch
+fi
+# Or maybe override
+#export TMPDIR=/scratch
+
+# determine platform
+UNIX="Linux"
+AR="x86_64"
+
+# determine platform, do it through 'uname'
+#UNIX=`uname -s`
+#AR=`uname -m`
+
+# WWWROOT of web server
+WWWROOT=/var/www/html
+
+# WWWpath to service
+SERVICEPATH=/services/ICERFIRE-1.0
+
+# other settings
+PLATFORM="${UNIX}_${AR}"
+
+
+#[ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; th
+# Expanding on blastdb
+options=()
+while (( $# > 0 )); do
+   case $1 in
+     "--jobid")
+       shift
+       JOBID=$1
+     ;;
+     "--add_expr")
+      shift
+      if [[ $1 == "yes" ]]; then
+         ADD_EXPR="true"
+      else
+         ADD_EXPR="false"
+      fi
+      ;;
+     "--usr_expr")
+      shift
+      if [[ $1 == "yes" ]]; then
+         USER_EXPR="true"
+      else
+         USER_EXPR="false"
+      fi
+      ;;
+     *)
+       options+=("$1")
+      ;;
+   esac
+   shift
+done
+
+options+=("-o")
+options+=("${WWWROOT}${SERVICEPATH}/tmp/${JOBID}")
+
 
 FILENAME=${1}
-USER_EXPR=${2}
-ADD_EXPR=${3}
+#USER_EXPR=${2}
+#ADD_EXPR=${3}
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
+
+
+mkdir -p ${WWWROOT}${SERVICEPATH}/tmp/${JOBID}
+mkdir -p /tmp/${JOBID}
 
 # USERDIR=/home/projects/vaccine/people/yatwan/
 USERDIR="/tools/src/"
@@ -51,5 +122,5 @@ echo "$PF"
 echo "#######################"
 echo " Running Model"
 echo "#######################"
-$PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR"
+$PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}"
 rm "${TMP}*scored_output*"
