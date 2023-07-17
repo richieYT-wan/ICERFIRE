@@ -21,7 +21,7 @@ def args_parser():
     parser = argparse.ArgumentParser(
         'Runs the ICERFIRE model on preprocessed data, assuming data has been processed to return' \
         'NetMHCpan ranks, ICOREs, self-similarity score, and PepX expression scores (Optional).')
-    parser.add_argument('-f', '--filepath', dest='filepath', type=str, required=True,
+    parser.add_argument('-f', '--infile', dest='infile', type=str, required=True,
                         help='Full path to the file containing the icores/selfsimilarity scores')
     parser.add_argument('-pf', '--pepxpath', dest='pepxpath', type=str, required=False, default=None,
                         help='Full path to the file containing the PepX query of the test file')
@@ -39,7 +39,7 @@ def main():
     run_dt = get_datetime_string()
     run_id = get_random_id(6)
     run_tag = 'AddExpr' if args['add_expression'] else 'NoExpr'
-    basename = os.path.basename(args['filepath']).split('.')[0]
+    basename = os.path.basename(args['infile']).split('.')[0]
     print(basename)
     run_name = f'{run_dt}_{basename}_{run_tag}_{run_id}'
     outdir = os.path.join(args['outdir'], f'{run_name}/')
@@ -51,7 +51,7 @@ def main():
     # TODO: TRAIN/ADD MODEL W/O EXPRESSION
     unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
-    data = pd.read_csv(args['filepath'], sep=' ')
+    data = pd.read_csv(args['infile'], sep=' ')
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath']!="None":
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])

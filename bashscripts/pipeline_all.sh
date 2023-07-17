@@ -29,8 +29,8 @@ SERVICEPATH=/services/ICERFIRE-1.0
 # other settings
 PLATFORM="${UNIX}_${AR}"
 
-if [ -z "$TMPDIR" ]; then
-	export TMPDIR=/scratch
+if [ -z "$TMP" ]; then
+	export TMP=/scratch
 fi
 #[ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; th
 # Expanding on blastdb
@@ -57,15 +57,19 @@ while (( $# > 0 )); do
          USER_EXPR="false"
       fi
       ;;
-     *)
-       options+=("$1")
+     "--infile")
+      shift
+      FILENAME=$1
       ;;
+#      *)
+#       options+=("$1")
+#      ;;
    esac
    shift
 done
 
-options+=("-o")
-options+=("${WWWROOT}${SERVICEPATH}/tmp/${JOBID}")
+#options+=("-o")
+#options+=("${WWWROOT}${SERVICEPATH}/tmp/${JOBID}")
 
 
 FILENAME=${1}
@@ -82,7 +86,7 @@ mkdir -p /tmp/${JOBID}
 USERDIR="/tools/src/"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
-TMP="${USERDIR}ICERFIRE-1.0/tmp/"
+#TMP="${USERDIR}ICERFIRE-1.0/tmp/"
 NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
 PEPXDIR="/home/databases/userdb/pepx/"
