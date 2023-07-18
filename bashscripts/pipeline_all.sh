@@ -7,28 +7,6 @@
 #               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
 ###############################################################################
 
-# determine where to store temporary files (must be writable to all users)
-
-# Or maybe override
-#export TMPDIR=/scratch
-
-# determine platform
-UNIX="Linux"
-AR="x86_64"
-
-# determine platform, do it through 'uname'
-#UNIX=`uname -s`
-#AR=`uname -m`
-
-# WWWROOT of web server
-WWWROOT=/var/www/html
-
-# WWWpath to service
-SERVICEPATH=/services/ICERFIRE-1.0
-
-# other settings
-PLATFORM="${UNIX}_${AR}"
-
 if [ -z "$TMP" ]; then
 	export TMP=/scratch
 fi
@@ -61,26 +39,31 @@ while (( $# > 0 )); do
       shift
       FILENAME=$1
       ;;
-#      *)
-#       options+=("$1")
-#      ;;
    esac
    shift
 done
-
-#options+=("-o")
-#options+=("${WWWROOT}${SERVICEPATH}/tmp/${JOBID}")
 
 
 #FILENAME=${1}
 #USER_EXPR=${2}
 #ADD_EXPR=${3}
+
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
 
+# determine platform
+UNIX="Linux"
+AR="x86_64"
 
+# WWWROOT of web server
+WWWROOT=/var/www/html
 
+# WWWpath to service
+SERVICEPATH=/services/ICERFIRE-1.0
+
+# other settings
+PLATFORM="${UNIX}_${AR}"
 USERDIR="/tools/src/"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
@@ -92,31 +75,43 @@ PEPXDIR="/home/databases/userdb/pepx/"
 PYTHON="/home/ctools/opt/anaconda3_202105/bin/python3"
 PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
-mkdir -p $TMP
+mkdir -p ${TMP}
 mkdir -p /tmp/${JOBID}
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
-bash netmhcpan_pipeline.sh ${FILENAME} ${TMPDIR} ${NETMHCPAN} ${KERNDIST}
+bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 
-# TODO: USER_EXPR should come from a checkbox in the front end (asking whether the user is providing expr values, false by default)
-# TODO: ADD_EXPR should come from a checkbox in the front end (Asking whether expression should be added to the model)
-# TODO: ADD_EXPR should be checked / true by default in the front end.
-if [ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; then
-  echo " "
-  echo "#######################"
-  echo "Processing PepX score"
-  echo "#######################"
-  bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
-  PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
-elif [ "$USER_EXPR" = "true" ]; then
-  echo "User-provided expression values; Skipping PepX query"
-  echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-  awk -F ',' '{print $4}' ${FILENAME} >> "${TMP}${final_fn}_tmp_expr.txt"
-  paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
-elif [ "$ADD_EXPR" = "false" ];then
-  echo "No expression added ; Skipping PepX query"
-  PF="None"
-fi
+case "$ADD_EXPR-$USER_EXPR" in
+  "true-true")
+    echo "User-provided expression values; Skipping PepX query"
+    echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
+    awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
+    paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+    ;;
+
+  "true-false")
+    echo " "
+    echo "#######################"
+    echo "Processing PepX score"
+    echo "#######################"
+    bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
+    PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
+    ;;
+
+  "false-false")
+    echo "No expression added; Skipping PepX query"
+    PF="None"
+    ;;
+
+  "false-true")
+    echo "Warning: Invalid combination - ADD_EXPR is 'false' but USER_EXPR is 'true'. Ignoring this part and continuing with the rest of the code."
+    ;;
+
+  *)
+    echo "Invalid combination of flags: ADD_EXPR=$ADD_EXPR, USER_EXPR=$USER_EXPR"
+    exit 1
+    ;;
+esac
 
 # Go to the Python dir and run the final model script
 cd ${PYDIR}
