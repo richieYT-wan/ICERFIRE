@@ -40,7 +40,8 @@ def main():
     run_id = get_random_id(6)
     run_tag = 'AddExpr' if args['add_expression'] else 'NoExpr'
     basename = os.path.basename(args['infile']).split('.')[0]
-    print(basename)
+    print('basename', basename)
+    print('infile, pepxfile', args['infile'], args['pepxpath'])
     run_name = f'{run_dt}_{basename}_{run_tag}_{run_id}'
     outdir = os.path.join(args['outdir'], f'{run_name}/')
     mkdirs(outdir)
