@@ -96,7 +96,7 @@ case "$ADD_EXPR-$USER_EXPR" in
     echo "#######################"
     echo "Processing PepX score"
     echo "#######################"
-    bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt"
+    bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
     PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
     ;;
 
