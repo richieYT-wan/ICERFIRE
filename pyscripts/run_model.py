@@ -58,6 +58,10 @@ def main():
         pepx = pd.read_csv(args['pepxpath'])
         data = pd.merge(data, pepx.rename(columns={'peptide': 'icore_wt_aligned'}), how='left',
                         left_on='icore_wt_aligned', right_on='icore_wt_aligned')
+        data["TPMFilledWithMedian"] = data["total_gene_tpm"].isna()
+        median_value = data["total_gene_tpm"].median(skipna=True)
+        data["total_gene_tpm"].fillna(median_value, inplace=True)
+
         data.fillna(data.median(skipna=True, numeric_only=True), inplace=True)
 
     data = pipeline_mutation_scores(data, 'icore_mut', 'icore_wt_aligned', ics,

@@ -6,49 +6,42 @@
 ###############################################################################
 #               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
 ###############################################################################
-#
-#if [ -z "$TMP" ]; then
-#	export TMP=/scratch
-#fi
-#
-#
-##[ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; th
-## Expanding on blastdb
-#options=()
-#while (( $# > 0 )); do
-#   case $1 in
-#     "--jobid")
-#       shift
-#       JOBID=$1
-#     ;;
-#     "--add_expr")
-#      shift
-#      if [[ $1 == "yes" ]]; then
-#         ADD_EXPR="true"
-#      else
-#         ADD_EXPR="false"
-#      fi
-#      ;;
-#     "--usr_expr")
-#      shift
-#      if [[ $1 == "yes" ]]; then
-#         USER_EXPR="true"
-#      else
-#         USER_EXPR="false"
-#      fi
-#      ;;
-#     "--infile")
-#      shift
-#      FILENAME=$1
-#      ;;
-#   esac
-#   shift
-#done
 
-# TODO THIS UPDATE IS FOR COMMAND-LINE TESTING PURPOSES ONLY, UPDATE ACCORDINGLY WHEN DEPLOYING FOR THE SERVER
-FILENAME=${1}
-ADD_EXPR=${2}
-USER_EXPR=${3}
+if [ -z "$TMP" ]; then
+	export TMP=/scratch
+fi
+
+while (( $# > 0 )); do
+   case $1 in
+     "--jobid")
+       shift
+       JOBID=$1
+       ;;
+     "--add_expr")
+       shift
+       if [[ $1 == "yes" ]]; then
+          ADD_EXPR="true"
+       fi
+       ;;
+     "--usr_expr")
+       shift
+       if [[ $1 == "yes" ]]; then
+         USER_EXPR="true"
+       fi
+       ;;
+     "--infile")
+       shift
+       FILENAME=$1
+       ;;
+   esac
+   shift
+done
+
+
+## TODO THIS UPDATE IS FOR COMMAND-LINE TESTING PURPOSES ONLY, UPDATE ACCORDINGLY WHEN DEPLOYING FOR THE SERVER
+#FILENAME=${1}
+#ADD_EXPR=${2}
+#USER_EXPR=${3}
 
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
@@ -124,4 +117,4 @@ echo "#######################"
 $PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}"
 
 TMP=$(dirname "${TMP}")
-rm "${TMP}"/*scored_output*
+rm "${TMP}/*${basenm}*"
