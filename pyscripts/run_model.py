@@ -77,7 +77,7 @@ def main():
         pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
                                                                         [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
                                   .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
-
+    print(f'Results saved at {outdir}{run_name}_predictions.csv')
 
 if __name__ == '__main__':
     main()
