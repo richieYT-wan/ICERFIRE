@@ -6,47 +6,49 @@
 ###############################################################################
 #               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
 ###############################################################################
+#
+#if [ -z "$TMP" ]; then
+#	export TMP=/scratch
+#fi
+#
+#
+##[ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; th
+## Expanding on blastdb
+#options=()
+#while (( $# > 0 )); do
+#   case $1 in
+#     "--jobid")
+#       shift
+#       JOBID=$1
+#     ;;
+#     "--add_expr")
+#      shift
+#      if [[ $1 == "yes" ]]; then
+#         ADD_EXPR="true"
+#      else
+#         ADD_EXPR="false"
+#      fi
+#      ;;
+#     "--usr_expr")
+#      shift
+#      if [[ $1 == "yes" ]]; then
+#         USER_EXPR="true"
+#      else
+#         USER_EXPR="false"
+#      fi
+#      ;;
+#     "--infile")
+#      shift
+#      FILENAME=$1
+#      ;;
+#   esac
+#   shift
+#done
 
-if [ -z "$TMP" ]; then
-	export TMP=/scratch
-fi
-#[ "$USER_EXPR" = "false" ] && [ "$ADD_EXPR" = "true" ]; th
-# Expanding on blastdb
-options=()
-while (( $# > 0 )); do
-   case $1 in
-     "--jobid")
-       shift
-       JOBID=$1
-     ;;
-     "--add_expr")
-      shift
-      if [[ $1 == "yes" ]]; then
-         ADD_EXPR="true"
-      else
-         ADD_EXPR="false"
-      fi
-      ;;
-     "--usr_expr")
-      shift
-      if [[ $1 == "yes" ]]; then
-         USER_EXPR="true"
-      else
-         USER_EXPR="false"
-      fi
-      ;;
-     "--infile")
-      shift
-      FILENAME=$1
-      ;;
-   esac
-   shift
-done
-
-
-#FILENAME=${1}
-#USER_EXPR=${2}
-#ADD_EXPR=${3}
+# TODO THIS UPDATE IS FOR COMMAND-LINE TESTING PURPOSES ONLY, UPDATE ACCORDINGLY WHEN DEPLOYING FOR THE SERVER
+FILENAME=${1}
+USER_EXPR=${2}
+ADD_EXPR=${3}
 
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
