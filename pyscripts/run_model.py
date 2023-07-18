@@ -78,9 +78,12 @@ def main():
                                                                         [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
                                   .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
     print(f'Results saved at {outdir}{run_name}_predictions.csv')
-    os.remove(args['infile'])
-    if os.path.exists(args['pepxpath']):
-        os.remove(args['pepxpath'])
+    for f in os.listdir(args['outdir']):
+        if f.endswith('.csv') or f.endswith('.txt'):
+            os.remove(os.path.join(args['outdir'],f))
+    # os.remove(args['infile'])
+    # if os.path.exists(args['pepxpath']):
+    #     os.remove(args['pepxpath'])
     return f'{outdir}{run_name}_predictions.csv'
 
 
