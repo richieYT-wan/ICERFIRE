@@ -11,6 +11,9 @@ if [ -z "$TMP" ]; then
 	export TMP=/scratch
 fi
 
+
+ADD_EXPR="false"
+USER_EXPR="false"
 while (( $# > 0 )); do
    case $1 in
      "--jobid")
