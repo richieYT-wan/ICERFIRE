@@ -117,7 +117,7 @@ esac
 
 # Go to the Python dir and run the final model script
 cd ${PYDIR}
-echo "$PF"
+echo "HERE IS THE PF FILE $PF"
 echo "#######################"
 echo " Running Model"
 echo "#######################"
