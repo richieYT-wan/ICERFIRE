@@ -72,7 +72,7 @@ done
 #options+=("${WWWROOT}${SERVICEPATH}/tmp/${JOBID}")
 
 
-FILENAME=${1}
+#FILENAME=${1}
 #USER_EXPR=${2}
 #ADD_EXPR=${3}
 filename=$(basename ${FILENAME})
@@ -80,12 +80,11 @@ basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
 
 
-mkdir -p ${WWWROOT}${SERVICEPATH}/tmp/${JOBID}
-mkdir -p /tmp/${JOBID}
 
 USERDIR="/tools/src/"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
+TMP=${WWWROOT}${SERVICEPATH}/tmp/${JOBID}
 #TMP="${USERDIR}ICERFIRE-1.0/tmp/"
 NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
@@ -93,6 +92,8 @@ PEPXDIR="/home/databases/userdb/pepx/"
 PYTHON="/home/ctools/opt/anaconda3_202105/bin/python3"
 PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
+mkdir -p $TMP
+mkdir -p /tmp/${JOBID}
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
 bash netmhcpan_pipeline.sh ${FILENAME} ${TMPDIR} ${NETMHCPAN} ${KERNDIST}
