@@ -122,4 +122,6 @@ echo "#######################"
 echo " Running Model"
 echo "#######################"
 $PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}"
-rm "${TMP}*scored_output*"
+
+TMP=$(dirname "${TMP}")
+rm "${TMP}"/*scored_output*
