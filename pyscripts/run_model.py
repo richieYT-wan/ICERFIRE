@@ -79,8 +79,8 @@ def main():
                                   .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
     print(f'Results saved at {outdir}{run_name}_predictions.csv')
     os.remove(args['infile'])
-    if os.path.exists(args['pepxfile']):
-        os.remove(args['pepxfile'])
+    if os.path.exists(args['pepxpath']):
+        os.remove(args['pepxpath'])
     return f'{outdir}{run_name}_predictions.csv'
 
 
