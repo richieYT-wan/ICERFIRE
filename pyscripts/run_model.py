@@ -78,6 +78,9 @@ def main():
                                                                         [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
                                   .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
     print(f'Results saved at {outdir}{run_name}_predictions.csv')
+    os.remove(args['infile'])
+    if os.path.exists(args['pepxfile']):
+        os.remove(args['pepxfile'])
     return f'{outdir}{run_name}_predictions.csv'
 
 
