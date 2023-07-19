@@ -66,6 +66,7 @@ USERDIR="/tools/src/"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
 TMP=${WWWROOT}${SERVICEPATH}/tmp/${JOBID}/
+chmod 755 $TMP
 #TMP="${USERDIR}ICERFIRE-1.0/tmp/"
 NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
@@ -117,4 +118,5 @@ echo "HERE IS THE PF FILE $PF"
 echo "#######################"
 echo " Running Model"
 echo "#######################"
-$PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}"
+$PYTHON run_model.py -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}" > ${TMP}python.logs
+chmod 755 ${TMP}python.logs
