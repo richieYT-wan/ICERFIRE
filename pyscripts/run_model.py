@@ -26,6 +26,7 @@ def args_parser():
     parser = argparse.ArgumentParser(
         'Runs the ICERFIRE model on preprocessed data, assuming data has been processed to return' \
         'NetMHCpan ranks, ICOREs, self-similarity score, and PepX expression scores (Optional).')
+    parser.add_argument('-j', '--jobid', dest='jobid', type=str, help='Job ID from the server')
     parser.add_argument('-f', '--infile', dest='infile', type=str, required=True,
                         help='Full path to the file containing the icores/selfsimilarity scores')
     parser.add_argument('-pf', '--pepxpath', dest='pepxpath', type=str, required=False, default=None,
@@ -50,7 +51,7 @@ def main():
     run_name = f'{run_dt}_{basename}_{run_tag}_{run_id}'
     outdir = os.path.join(args['outdir'], f'{run_name}/')
     mkdirs(outdir)
-
+    jobid = str(args['jobid'])
     # Get the directory one level above the script
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
     # Load appropriate model
@@ -98,10 +99,8 @@ if __name__ == '__main__':
           '/nettcr_predictions.csv" target="_blank">here</a>' + ' to download the results in .csv format.')
 
     # print(pred_df, file=sys.stdout)
-    time_elapsed = time.time() - start_time
-    print('Total time elapsed: {:.1f} s '.format(time_elapsed))
     # print('Total time elapsed (without import): {:.1f} s '.format(time.time()-s_time))
 
     print("\n \nBelow is a table represention of binding predictions between T-Cell receptor and peptides. \n \n")
 
-    print(pred_df)
+    print(predictions)

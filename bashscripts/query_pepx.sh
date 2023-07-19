@@ -13,7 +13,7 @@ fi
 # PEPXDIR='/home/projects/vaccine/people/yatwan/pepx/'
 # TMPDIR='/home/projects/vaccine/people/yatwan/ICERFIRE/tmp/'
 PEPXDIR='/home/databases/userdb/pepx/'
-TMPDIR=$2
+TMPDIR=${2}
 SQLITE='/tools/src/ICERFIRE-1.0/bin/sqlite3'
 
 filepath=$1
