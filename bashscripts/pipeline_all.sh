@@ -64,6 +64,7 @@ SERVICEPATH=/services/ICERFIRE-1.0
 PLATFORM="${UNIX}_${AR}"
 USERDIR="/tools/src/"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
+SRCDIR="${USERDIR}ICERFIRE-1.0/src/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
 TMP=${WWWROOT}${SERVICEPATH}/tmp/${JOBID}/
 chmod 755 $TMP
@@ -114,7 +115,8 @@ case "$ADD_EXPR-$USER_EXPR" in
 esac
 
 # Go to the Python dir and run the final model script
-cd ${PYDIR}
+#cd ${PYDIR}
+cd ${SRCDIR}
 #echo "HERE IS THE PF FILE $PF"
 echo "#######################"
 echo " Running Model"
