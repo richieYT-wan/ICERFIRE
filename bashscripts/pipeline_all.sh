@@ -123,6 +123,5 @@ echo "#######################"
 echo " Running Model"
 echo "#######################"
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}"
-#> "${TMP}python.logs" 2>&1
-#chmod 755 "${TMP}python.logs"
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}"> "${TMP}python.logs" 2>&1
+chmod 755 "${TMP}python.logs"
