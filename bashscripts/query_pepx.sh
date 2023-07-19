@@ -41,4 +41,5 @@ echo "Query done ; Updating table format and moving temporary files"
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
 echo "Saved at ${TMPDIR}${output_file}.csv"
+# Giving permission somehow because otherwise my other part of the scripts couldnt read it
 chmod 755 ${TMPDIR}${output_file}.csv"

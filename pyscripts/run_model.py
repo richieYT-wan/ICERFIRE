@@ -14,6 +14,8 @@ if parent_dir not in sys.path:
 src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
 # Add the "src" directory to the Python module search path
 sys.path.append(src_path)
+print(sys.path)
+print(src_path)
 
 # print(module_path, sys.path)
 from src.utils import pkl_load
