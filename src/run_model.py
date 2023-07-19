@@ -45,7 +45,7 @@ def main():
     run_tag = 'AddExpr' if args['add_expression'] else 'NoExpr'
     # basename = os.path.basename(args['infile']).split('.')[0]
     # print('basename', basename)
-    print('infile, pepxfile', args['infile'], args['pepxpath'])
+    # print('infile, pepxfile', args['infile'], args['pepxpath'])
     run_name = f'{run_dt}_{run_tag}_{run_id}'
     outdir = os.path.join(args['outdir'], f'{run_name}/')
     mkdirs(outdir)
@@ -84,7 +84,7 @@ def main():
                                                                         [f'fold_{x}' for x in
                                                                          range(1, len(test_results.keys()))])}) \
             .to_csv(f'{outdir}ICERFIRE_metrics_per_fold.csv', index=False)
-    print(f'Results saved at {outdir}ICERFIRE_predictions.csv')
+    # print(f'Results saved at {outdir}ICERFIRE_predictions.csv')
     # Cleaning input/temporary files and returning the final saved filename
     for f in os.listdir(args['outdir']):
         if f.endswith('.csv') or f.endswith('.txt'):
