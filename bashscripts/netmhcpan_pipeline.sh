@@ -112,10 +112,10 @@ fn=$(basename "${OUTDIR}merged_output.txt")
 echo "icore_similarity_score" > "${OUTDIR}${fn}.kerndist"
 for i in $(seq 2 $len1)
 do
-  awk -v line=$i 'FNR==line {print $11}' "${OUTDIR}merged_output.txt" > tmp1.pep
-  awk -v line=$i 'FNR==line {print $13}' "${OUTDIR}merged_output.txt" > tmp2.pep
+  awk -v line=$i 'FNR==line {print $11}' "${OUTDIR}merged_output.txt" > "${OUTDIR}tmp1.pep"
+  awk -v line=$i 'FNR==line {print $13}' "${OUTDIR}merged_output.txt" > "${OUTDIR}tmp2.pep"
 #  ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 ./tmp1.pep ./tmp2.pep | tail -n 1 | awk '{print $3}' | awk 'NR == 1 {print $1}' >> "${OUTDIR}${fn}.kerndist"
-  ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 ./tmp1.pep ./tmp2.pep >> "${OUTDIR}${fn}.kerndist"
+  ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 "${OUTDIR}tmp1.pep" "${OUTDIR}tmp2.pep" >> "${OUTDIR}${fn}.kerndist"
   #{origin = $1} {$1 = $origin; print}
 done
 #rm tmp1.pep tmp2.pep
