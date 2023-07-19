@@ -115,13 +115,13 @@ do
   awk -v line=$i 'FNR==line {print $11}' "${OUTDIR}merged_output.txt" > "${OUTDIR}tmp1.pep"
   awk -v line=$i 'FNR==line {print $13}' "${OUTDIR}merged_output.txt" > "${OUTDIR}tmp2.pep"
 #  ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 ./tmp1.pep ./tmp2.pep | tail -n 1 | awk '{print $3}' | awk 'NR == 1 {print $1}' >> "${OUTDIR}${fn}.kerndist"
-  ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 "${OUTDIR}tmp1.pep" "${OUTDIR}tmp2.pep" >> "${OUTDIR}${fn}.kerndist"
+  ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 "${OUTDIR}tmp1.pep" "${OUTDIR}tmp2.pep" | tail -n 1 | awk '{print $3}' >> "${OUTDIR}${fn}.kerndist"
   #{origin = $1} {$1 = $origin; print}
 done
-#rm tmp1.pep tmp2.pep
-#paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}.txt"
-##rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
-#awk -F ' ' 'NR>1 {print $13}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
+rm ${OUTDIR}tmp1.pep ${OUTDIR}tmp2.pep
+paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}.txt"
+rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
+awk -F ' ' 'NR>1 {print $13}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
 
 
 
