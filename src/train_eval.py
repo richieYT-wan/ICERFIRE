@@ -157,11 +157,9 @@ def evaluate_trained_models(test_dataframe, models_dict, ics_dict, encoding_kwar
                                                                          leave=False,
                                                                          position=2))
     predictions_df = [x[0] for x in output]
-    # print('here', len(predictions_df), len(predictions_df[0]))
     # Here simply concatenates it to get all the predictions from the folds
 
     predictions_df = pd.concat(predictions_df)
-    print(8, len(predictions_df))
     # Get the mean predictions
     predictions_df = predictions_df.groupby(['Peptide', 'HLA', 'seq_id']).agg(mean_pred=('pred', 'mean')).reset_index()
     if encoding_kwargs['target_col'] in predictions_df.columns:
