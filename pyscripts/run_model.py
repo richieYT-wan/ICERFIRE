@@ -11,7 +11,7 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 # Get the absolute path of the "src" directory and HARDCODEDDLY ADDING IT
-src_path = '/tools/src/ICERFIRE-1.0/src/'
+src_path = '/home/local/tools/src/ICERFIRE-1.0/src/'
 # Add the "src" directory to the Python module search path
 sys.path.append(src_path)
 print(sys.path)

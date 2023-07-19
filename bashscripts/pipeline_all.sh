@@ -80,6 +80,7 @@ mkdir -p /tmp/${JOBID}
 cd ${BASHDIR}
 bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 
+
 case "$ADD_EXPR-$USER_EXPR" in
   "true-true")
     echo "User-provided expression values; Skipping PepX query"
@@ -114,10 +115,10 @@ esac
 
 # Go to the Python dir and run the final model script
 cd ${PYDIR}
-echo "HERE IS THE PF FILE $PF"
+#echo "HERE IS THE PF FILE $PF"
 echo "#######################"
 echo " Running Model"
 echo "#######################"
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}" > "${TMP}python.logs" 2>&1
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" > "${TMP}python.logs" 2>&1
 chmod 755 "${TMP}python.logs"
