@@ -16,7 +16,7 @@ src_path = '/home/local/tools/src/ICERFIRE-1.0/src/'
 sys.path.append(src_path)
 print(sys.path)
 print(src_path)
-
+os.listdir(src_path)
 # print(module_path, sys.path)
 from src.utils import pkl_load
 from src.train_eval import evaluate_trained_models
