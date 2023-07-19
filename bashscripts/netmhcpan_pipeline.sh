@@ -99,7 +99,6 @@ echo "#######################"
 echo "Processing Dissimilarity score"
 echo "#######################"
 
-echo "${KERNDIST}"
 len1=$(wc -l "${OUTDIR}merged_output.txt" | awk '{print $1}')
 fn=$(basename "${OUTDIR}merged_output.txt")
 echo "icore_similarity_score" > "${OUTDIR}${fn}.kerndist"

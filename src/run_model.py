@@ -72,7 +72,7 @@ def main():
     data['seq_id'] = [f'seq_{i}' for i in range(1, len(data) + 1)]
     cols_to_save = ['Peptide', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut',
                     'EL_rank_wt_aligned']
-    cols_to_save = cols_to_save + kwargs['mut_col'] + ['mean_pred']
+    cols_to_save = cols_to_save + kwargs['mut_col'] + ['prediction']
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True,
                                                         n_jobs=8)
     # Saving results as CSV table
