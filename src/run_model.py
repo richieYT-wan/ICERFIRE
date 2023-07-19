@@ -18,10 +18,9 @@ print(sys.path)
 print(src_path)
 os.listdir(src_path)
 # print(module_path, sys.path)
-from .utils import pkl_load
-from .train_eval import evaluate_trained_models
-from .mutation_tools import pipeline_mutation_scores
-from .utils import str2bool, get_random_id, get_datetime_string, mkdirs
+from train_eval import evaluate_trained_models
+from mutation_tools import pipeline_mutation_scores
+from utils import str2bool, get_random_id, get_datetime_string, mkdirs, pkl_load
 
 
 def args_parser():
