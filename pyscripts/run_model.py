@@ -10,18 +10,18 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-# Get the absolute path of the "src" directory
-src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src/"))
+# Get the absolute path of the "src" directory and HARDCODEDDLY ADDING IT
+src_path = '/tools/src/ICERFIRE-1.0/src/'
 # Add the "src" directory to the Python module search path
 sys.path.append(src_path)
 print(sys.path)
 print(src_path)
 
 # print(module_path, sys.path)
-from .src.utils import pkl_load
-from .src.train_eval import evaluate_trained_models
-from .src.mutation_tools import pipeline_mutation_scores
-from .src.utils import str2bool, get_random_id, get_datetime_string, mkdirs
+from src.utils import pkl_load
+from src.train_eval import evaluate_trained_models
+from src.mutation_tools import pipeline_mutation_scores
+from src.utils import str2bool, get_random_id, get_datetime_string, mkdirs
 
 
 def args_parser():
