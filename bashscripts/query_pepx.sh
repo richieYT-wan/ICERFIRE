@@ -23,6 +23,7 @@ basenm="${filename%.*}"
 database="${PEPXDIR}pepx-export.db"
 output_file="${basenm}_pepx_output"
 
+
 peptide_string=`cat $filepath | perl -ne 'while(<>){chomp; push @all, $_;} print join("\",\"",@all)'`
 
 # Select only those fields, from the peptide_gene_tpms_collapsed table where dataset_id = 1 (id_1 == TCGA_PANCAN)
@@ -33,11 +34,11 @@ query="$query dataset_id = $dataset_id"
 query="$query and peptide in (\"$peptide_string\")"
 query="$query order by peptide asc;"
 
-echo "Running PepX query on ${1}"
+echo "Running PepX query on ${1}, saving in ${TMPDIR}, using ${SQLITE}"
 $SQLITE $database -header "$query" > "${TMPDIR}${output_file}.csv"
 echo "Query done ; Updating table format and moving temporary files"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
 echo "Saved at ${TMPDIR}${output_file}.csv"
-
+chmod 755 ${TMPDIR}${output_file}.csv"

@@ -122,6 +122,6 @@ rm ${OUTDIR}tmp1.pep ${OUTDIR}tmp2.pep
 paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}.txt"
 rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
 awk -F ' ' 'NR>1 {print $13}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
-
+chmod 755 "${OUTDIR}${final_fn}_wt_icore.txt"
 
 
