@@ -11,7 +11,7 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 # Get the absolute path of the "src" directory
-src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src/"))
 # Add the "src" directory to the Python module search path
 sys.path.append(src_path)
 print(sys.path)
