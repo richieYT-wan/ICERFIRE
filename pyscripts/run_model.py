@@ -10,6 +10,11 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
+# Get the absolute path of the "src" directory
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
+# Add the "src" directory to the Python module search path
+sys.path.append(src_path)
+
 # print(module_path, sys.path)
 from src.utils import pkl_load
 from src.train_eval import evaluate_trained_models
@@ -78,15 +83,25 @@ def main():
                                                                         [f'fold_{x}' for x in range(1, len(test_results.keys()))])})\
                                   .to_csv(f'{outdir}{run_name}_metrics_per_fold.csv', index=False)
     print(f'Results saved at {outdir}{run_name}_predictions.csv')
+    # Cleaning input/temporary files and returning the final saved filename
     for f in os.listdir(args['outdir']):
         if f.endswith('.csv') or f.endswith('.txt'):
-            os.remove(os.path.join(args['outdir'],f))
-    # os.remove(args['infile'])
-    # if os.path.exists(args['pepxpath']):
-    #     os.remove(args['pepxpath'])
-    return f'{outdir}{run_name}_predictions.csv'
+            os.remove(os.path.join(args['outdir'], f))
+
+    return predictions, f'{outdir}{run_name}_predictions.csv'
 
 
 if __name__ == '__main__':
-    filename = main()
-    print(filename)
+    predictions, filename = main()
+    # TODO : MAKE THE STUPID HYPERLINK TO DOWNLOAD, AND MAYBE FIX THE OUTDIR SO IT'S NOT AS CONVOLUTED
+    print('Click ' + '<a href="https://services.healthtech.dtu.dk/services/NetTCR-2.0/tmp/' + args.jobid +
+          '/nettcr_predictions.csv" target="_blank">here</a>' + ' to download the results in .csv format.')
+
+    # print(pred_df, file=sys.stdout)
+    time_elapsed = time.time() - start_time
+    print('Total time elapsed: {:.1f} s '.format(time_elapsed))
+    # print('Total time elapsed (without import): {:.1f} s '.format(time.time()-s_time))
+
+    print("\n \nBelow is a table represention of binding predictions between T-Cell receptor and peptides. \n \n")
+
+    print(pred_df)
