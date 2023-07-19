@@ -76,7 +76,8 @@ def main():
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True,
                                                         n_jobs=8)
     # Saving results as CSV table
-    predictions.sort_values('Peptide', ascending=True).to_csv(f'{outdir}ICERFIRE_predictions.csv',
+    predictions.sort_values('Peptide', ascending=True)\
+               .rename(columns={'mean_pred':'prediction'}).to_csv(f'{outdir}ICERFIRE_predictions.csv',
                                                               columns=cols_to_save, index=False)
     if test_results is not None:
         pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
@@ -89,7 +90,7 @@ def main():
         if f.endswith('.csv') or f.endswith('.txt'):
             os.remove(os.path.join(args['outdir'], f))
 
-    return predictions, run_name, jobid
+    return predictions.rename(columns={'mean_pred':'prediction'}), run_name, jobid
 
 
 if __name__ == '__main__':
@@ -97,7 +98,8 @@ if __name__ == '__main__':
     print('Click ' + '<a href="https://services.healthtech.dtu.dk/services/ICERFIRE-1.0/tmp/' \
           + f'{jobid}/{run_name}/' \
             'ICERFIRE_predictions.csv" target="_blank">here</a>' + ' to download the results in .csv format.')
-
-    print("\n \nBelow is a table represention of binding predictions between T-Cell receptor and peptides. \n \n")
-
-    print(predictions)
+    pd.set_option('display.max_columns', 30)
+    pd.set_option('display.max_rows', 99)
+    print("\n \nBelow is a table preview of the ICERFIRE predictions as well as the identified ICOREs. \n \n")
+    print(predictions[['Peptide', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut', 'EL_rank_wt_aligned',
+                       'total_gene_tpm', 'prediction']])

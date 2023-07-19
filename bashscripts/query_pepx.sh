@@ -34,12 +34,12 @@ query="$query dataset_id = $dataset_id"
 query="$query and peptide in (\"$peptide_string\")"
 query="$query order by peptide asc;"
 
-echo "Running PepX query on ${1}, saving in ${TMPDIR}, using ${SQLITE}"
+#echo "Running PepX query on ${1}, saving in ${TMPDIR}, using ${SQLITE}"
 $SQLITE $database -header "$query" > "${TMPDIR}${output_file}.csv"
-echo "Query done ; Updating table format and moving temporary files"
+#echo "Query done ; Updating table format and moving temporary files"
 # Replace | with commas to make it csv, using a temp file then mv to overwrite
 sed 's/|/,/g' < "${TMPDIR}${output_file}.csv" > "${TMPDIR}${output_file}_temp.csv"
 mv "${TMPDIR}${output_file}_temp.csv" "${TMPDIR}${output_file}.csv"
-echo "Saved at ${TMPDIR}${output_file}.csv"
+#echo "Saved at ${TMPDIR}${output_file}.csv"
 # Giving permission somehow because otherwise my other part of the scripts couldnt read it
 chmod 755 ${TMPDIR}${output_file}.csv"

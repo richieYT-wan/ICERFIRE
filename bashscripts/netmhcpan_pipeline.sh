@@ -94,14 +94,7 @@ rm "${OUTDIR}output_tmp_mut.txt"
 rm "${OUTDIR}output_tmp_wt.txt"
 rm "${OUTDIR}base_file.txt"
 
-
 echo " "
-echo "#######################"
-echo "Done processing ICOREs"
-echo "#######################"
-
-echo " "
-
 echo "#######################"
 echo "Processing Dissimilarity score"
 echo "#######################"
