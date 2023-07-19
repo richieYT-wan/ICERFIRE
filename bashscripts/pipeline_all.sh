@@ -118,5 +118,5 @@ echo "HERE IS THE PF FILE $PF"
 echo "#######################"
 echo " Running Model"
 echo "#######################"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}" > "${TMP}python.logs"
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${WWWROOT}${SERVICEPATH}/tmp/${JOBID}" > "${TMP}python.logs" 2>&1
 chmod 755 "${TMP}python.logs"
