@@ -91,10 +91,10 @@ case "$ADD_EXPR-$USER_EXPR" in
     ;;
 
   "true-false")
-    echo " "
-    echo "#######################"
-    echo "Processing PepX score"
-    echo "#######################"
+#    echo " "
+#    echo "#######################"
+#    echo "Processing PepX score"
+#    echo "#######################"
     bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
     PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
     ;;
@@ -118,10 +118,10 @@ esac
 #cd ${PYDIR}
 cd ${SRCDIR}
 #echo "HERE IS THE PF FILE $PF"
-echo " "
-echo "#######################"
-echo "     Running Model"
-echo "#######################"
+#echo " "
+#echo "#######################"
+#echo "     Running Model"
+#echo "#######################"
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
 $PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}"
 #> "${TMP}logs" 2>&1

@@ -15,10 +15,10 @@ OUTDIR=${2}
 # TODO: HERE PATH IS TO BE REPLACED BY THE PATH TO NETMHCPAN4-1 (command line) in HealthTechCluster
 NETMHCPAN=${3}
 KERNDIST=${4}
-
-echo "#######################"
-echo "Processing ICOREs with NetMHCpan"
-echo "#######################"
+#
+#echo "#######################"
+#echo "Processing ICOREs with NetMHCpan"
+#echo "#######################"
 
 # Saving the Peptides to a newfile to be used later
 
@@ -93,11 +93,11 @@ rm "${OUTDIR}final_output_mut.txt"
 rm "${OUTDIR}output_tmp_mut.txt"
 rm "${OUTDIR}output_tmp_wt.txt"
 rm "${OUTDIR}base_file.txt"
-
-echo " "
-echo "#######################"
-echo "Processing Dissimilarity score"
-echo "#######################"
+#
+#echo " "
+#echo "#######################"
+#echo "Processing Dissimilarity score"
+#echo "#######################"
 
 len1=$(wc -l "${OUTDIR}merged_output.txt" | awk '{print $1}')
 fn=$(basename "${OUTDIR}merged_output.txt")
