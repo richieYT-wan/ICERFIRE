@@ -67,8 +67,8 @@ def main():
 
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath'] != "None":
         if args['user_expression'] and 'total_gene_tpm' not in data.columns:
-            print('Add expression and User-provided expression were selected but no TPM values found in the data.\n' \
-                  'Continuing with a model using queried expression values')
+            print('\nAdd expression and User-provided expression were selected but no TPM values found in the data.\n' \
+                  'Continuing with a model using queried expression values.\n')
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
         data = pd.merge(data, pepx.rename(columns={'peptide': 'icore_wt_aligned'}), how='left',
