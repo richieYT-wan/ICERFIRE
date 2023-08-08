@@ -21,7 +21,7 @@ from utils import str2bool, get_random_id, get_datetime_string, mkdirs, pkl_load
 
 
 def get_rank(pred, hp):
-    return (hp[0]>pred).mean() * 100
+    return (hp[0] > pred).mean() * 100
 
 
 def args_parser():
@@ -75,18 +75,20 @@ def main():
     data = pipeline_mutation_scores(data, 'icore_mut', 'icore_wt_aligned', ics,
                                     threshold=kwargs['threshold'], prefix='icore_')
     data['seq_id'] = [f'seq_{i}' for i in range(1, len(data) + 1)]
-    cols_to_save = ['Peptide', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut',
-                    'EL_rank_wt_aligned']
-    cols_to_save = cols_to_save + kwargs['mut_col'] + ['prediction', '%Rank']
+
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True,
                                                         n_jobs=8)
     # Saving results as CSV table
     predictions.sort_values('Peptide', ascending=True, inplace=True)
+    predictions.rename(columns={'mean_pred': 'prediction'}, inplace=True)
     predictions.reset_index(drop=True, inplace=True)
-    predictions['%Rank'] = predictions['mean_pred'].apply(get_rank, hp=preds_100k)
-    predictions.sort_values('Peptide', ascending=True)\
-               .rename(columns={'mean_pred':'prediction'}).to_csv(f'{outdir}ICERFIRE_predictions.csv',
-                                                              columns=cols_to_save, index=False)
+    predictions['%Rank'] = predictions['prediction'].apply(get_rank, hp=preds_100k)
+
+    cols_to_save = ['Peptide', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut',
+                    'EL_rank_wt_aligned']
+    cols_to_save = cols_to_save + kwargs['mut_col'] + ['prediction', '%Rank']
+    predictions.to_csv(f'{outdir}ICERFIRE_predictions.csv',
+                       columns=cols_to_save, index=False)
     if test_results is not None:
         pd.DataFrame(test_results).rename(columns={k: v for k, v in zip(range(len(test_results.keys())),
                                                                         [f'fold_{x}' for x in
@@ -98,7 +100,7 @@ def main():
         if f.endswith('.csv') or f.endswith('.txt'):
             os.remove(os.path.join(args['outdir'], f))
 
-    return predictions.rename(columns={'mean_pred':'prediction'}), run_name, jobid
+    return predictions, run_name, jobid
 
 
 if __name__ == '__main__':
