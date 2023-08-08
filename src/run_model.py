@@ -81,7 +81,8 @@ def main():
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True,
                                                         n_jobs=8)
     # Saving results as CSV table
-    predictions.sort_values('Peptide', ascending=True, inplace=True).reset_index()
+    predictions.sort_values('Peptide', ascending=True, inplace=True)
+    predictions.reset_index(drop=True, inplace=True)
     predictions['%Rank'] = predictions['mean_pred'].apply(get_rank, hp=preds_100k)
     predictions.sort_values('Peptide', ascending=True)\
                .rename(columns={'mean_pred':'prediction'}).to_csv(f'{outdir}ICERFIRE_predictions.csv',
