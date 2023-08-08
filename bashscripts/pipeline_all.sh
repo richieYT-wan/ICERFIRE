@@ -85,9 +85,21 @@ bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 case "$ADD_EXPR-$USER_EXPR" in
   "true-true")
     echo "User-provided expression values; Skipping PepX query"
-    echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-    awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
-    paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+#    echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
+#    awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
+#    paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+#    ;;
+
+    if awk -F ',' 'NF>=4 && $4 ~ /^[0-9]*(\.[0-9]*)?$/ {exit 0} END {exit 1}' "${FILENAME}"; then
+        echo "Fourth column contains only numerical values"
+        echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
+        awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
+        paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+    else
+        echo "User-provided expression was selected but no fourth column found. Running expression database query"
+        bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
+        PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
+    fi
     ;;
 
   "true-false")

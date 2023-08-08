@@ -65,13 +65,10 @@ def main():
     unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
 
-    if args['add_expression'] and args['user_expression'] and 'total_gene_tpm' not in data.columns:
-        args['add_expression'] = False
-        unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{False}.pkl')
-        models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
-        print('User-provided expression was selected but no TPM values found in the data. Continuing with a model without expression')
-
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath'] != "None":
+        if args['user_expression'] and 'total_gene_tpm' not in data.columns:
+            print('Add expression and User-provided expression were selected but no TPM values found in the data.\n' \
+                  'Continuing with a model using queried expression values')
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
         data = pd.merge(data, pepx.rename(columns={'peptide': 'icore_wt_aligned'}), how='left',
