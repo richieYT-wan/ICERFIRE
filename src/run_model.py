@@ -99,7 +99,7 @@ def main():
     for f in os.listdir(args['outdir']):
         if f.endswith('.csv') or f.endswith('.txt'):
             os.remove(os.path.join(args['outdir'], f))
-
+    print('\n\nHERE', predictions.columns, '\n\n')
     return predictions, run_name, jobid
 
 

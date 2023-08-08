@@ -111,8 +111,15 @@ do
   #{origin = $1} {$1 = $origin; print}
 done
 rm ${OUTDIR}tmp1.pep ${OUTDIR}tmp2.pep
-paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}.txt"
+paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}_tmp.txt"
 rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
+
+# Here, need to create a new tmp file with the wild_type+header, paste it to the final_fn file so that we also have the full wt not just the icore_wt
+echo "wild_type" > "${OUTDIR}${fn}_fullwt.txt"
+cut -d ',' -f 2 "${input_file}" >> "${OUTDIR}${filename}_fullwt.txt"
+paste -d' ' "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt" > "${OUTDIR}${final_fn}.txt"
+rm "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt"
+
 awk -F ' ' 'NR>1 {print $13}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
 # Giving permission somehow because otherwise my other part of the scripts couldnt read it
 chmod 755 "${OUTDIR}${final_fn}_wt_icore.txt"
