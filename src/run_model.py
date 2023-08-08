@@ -94,12 +94,11 @@ def main():
                                                                         [f'fold_{x}' for x in
                                                                          range(1, len(test_results.keys()))])}) \
             .to_csv(f'{outdir}ICERFIRE_metrics_per_fold.csv', index=False)
-    # print(f'Results saved at {outdir}ICERFIRE_predictions.csv')
+
     # Cleaning input/temporary files and returning the final saved filename
     for f in os.listdir(args['outdir']):
         if f.endswith('.csv') or f.endswith('.txt'):
             os.remove(os.path.join(args['outdir'], f))
-    print('\n\nHERE', predictions.columns, '\n\n')
     return predictions, run_name, jobid
 
 
