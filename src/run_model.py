@@ -60,7 +60,7 @@ def main():
     unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
     data = pd.read_csv(args['infile'], sep=' ')
-    preds_100k = pd.read_csv('/tools/src/ICERFIRE-1.0/data/human_proteome/preds_100k.txt', header=None)
+    preds_100k = pd.read_csv('/tools/src/ICERFIRE-1.0/data/human_proteome/hp_preds_100k.txt', header=None)
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath'] != "None":
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
