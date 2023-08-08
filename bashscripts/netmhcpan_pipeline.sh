@@ -115,7 +115,7 @@ paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}$
 rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
 
 # Here, need to create a new tmp file with the wild_type+header, paste it to the final_fn file so that we also have the full wt not just the icore_wt
-echo "wild_type" > "${OUTDIR}${fn}_fullwt.txt"
+echo "wild_type" > "${OUTDIR}${filename}_fullwt.txt"
 cut -d ',' -f 2 "${input_file}" >> "${OUTDIR}${filename}_fullwt.txt"
 paste -d' ' "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt" > "${OUTDIR}${final_fn}.txt"
 rm "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt"
