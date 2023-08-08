@@ -36,6 +36,8 @@ def args_parser():
     parser.add_argument('-ae', '--add_expression', dest='add_expression', type=str2bool,
                         required=False, default=True,
                         help='Whether to use the model that includes expression as a feature')
+    parser.add_argument('-ue', '--user_expression', dest='user_expression', type=str2bool,
+                        default=False, help='Whether the user provides their own expression values')
     parser.add_argument('-o', '--outdir', dest='outdir', type=str, required=False, default='../tmp/',
                         help='Output directory')
     return parser.parse_args()
@@ -43,6 +45,7 @@ def args_parser():
 
 def main():
     args = vars(args_parser())
+
     # Get the output directory with a random ID and a tag to indicate whether we used the model with expression
     run_dt = get_datetime_string()
     run_id = get_random_id(6)
@@ -56,11 +59,18 @@ def main():
     jobid = str(args['jobid'])
     # Get the directory one level above the script
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
-    # Load appropriate model
-    unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
-    models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
+    # Load appropriate model and data
     data = pd.read_csv(args['infile'], sep=' ')
     preds_100k = pd.read_csv('/tools/src/ICERFIRE-1.0/data/human_proteome/hp_preds_100k.txt', header=None)
+    unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
+    models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
+
+    if args['add_expression'] and args['user_expression'] and 'total_gene_tpm' not in data.columns:
+        args['add_expression'] = False
+        unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{False}.pkl')
+        models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
+        print('User-provided expression was selected but no TPM values found in the data. Continuing with a model without expression')
+
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath'] != "None":
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
