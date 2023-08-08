@@ -57,7 +57,6 @@ def main():
     # Get the directory one level above the script
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/'
     # Load appropriate model
-    # TODO: TRAIN/ADD MODEL W/O EXPRESSION
     unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
     data = pd.read_csv(args['infile'], sep=' ')

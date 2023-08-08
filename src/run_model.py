@@ -20,6 +20,10 @@ from mutation_tools import pipeline_mutation_scores
 from utils import str2bool, get_random_id, get_datetime_string, mkdirs, pkl_load
 
 
+def get_rank(pred, hp):
+    return (hp[0]>pred).mean() * 100
+
+
 def args_parser():
     parser = argparse.ArgumentParser(
         'Runs the ICERFIRE model on preprocessed data, assuming data has been processed to return' \
@@ -56,6 +60,7 @@ def main():
     unpickle = pkl_load(f'{parent_dir}saved_models/ICERFIRE_Expr{args["add_expression"]}.pkl')
     models, kwargs, ics = unpickle['model'], unpickle['kwargs'], unpickle['ics']
     data = pd.read_csv(args['infile'], sep=' ')
+    preds_100k = pd.read_csv('/tools/src/ICERFIRE-1.0/data/human_proteome/preds_100k.txt', header=None)
     if args['add_expression'] and os.path.exists(args['pepxpath']) and args['pepxpath'] != "None":
         # TODO : DEAL WITH case where PepX is not used and maybe expression is still enabled (and provided)
         pepx = pd.read_csv(args['pepxpath'])
@@ -72,10 +77,12 @@ def main():
     data['seq_id'] = [f'seq_{i}' for i in range(1, len(data) + 1)]
     cols_to_save = ['Peptide', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut',
                     'EL_rank_wt_aligned']
-    cols_to_save = cols_to_save + kwargs['mut_col'] + ['prediction']
+    cols_to_save = cols_to_save + kwargs['mut_col'] + ['prediction', '%Rank']
     predictions, test_results = evaluate_trained_models(data, models, ics, encoding_kwargs=kwargs, test_mode=True,
                                                         n_jobs=8)
     # Saving results as CSV table
+    predictions.sort_values('Peptide', ascending=True, inplace=True).reset_index()
+    predictions['%Rank'] = predictions['mean_pred'].apply(get_rank, hp=preds_100k)
     predictions.sort_values('Peptide', ascending=True)\
                .rename(columns={'mean_pred':'prediction'}).to_csv(f'{outdir}ICERFIRE_predictions.csv',
                                                               columns=cols_to_save, index=False)
@@ -101,5 +108,5 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 30)
     pd.set_option('display.max_rows', 99)
     print("\n \nBelow is a table preview of the ICERFIRE predictions as well as the identified ICOREs. \n \n")
-    print(predictions[['Peptide', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut', 'EL_rank_wt_aligned',
-                       'total_gene_tpm', 'prediction']])
+    print(predictions[['Peptide', 'wild_type', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut', 'EL_rank_wt_aligned',
+                       'total_gene_tpm', 'prediction', '%Rank']])
