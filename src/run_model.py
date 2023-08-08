@@ -84,7 +84,7 @@ def main():
     predictions.reset_index(drop=True, inplace=True)
     predictions['%Rank'] = predictions['prediction'].apply(get_rank, hp=preds_100k)
 
-    cols_to_save = ['Peptide', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut',
+    cols_to_save = ['Peptide', 'wild_type', 'HLA', 'Pep', 'Core', 'icore_start_pos', 'icore_mut', 'icore_wt_aligned', 'EL_rank_mut',
                     'EL_rank_wt_aligned']
     cols_to_save = cols_to_save + kwargs['mut_col'] + ['prediction', '%Rank']
     predictions.to_csv(f'{outdir}ICERFIRE_predictions.csv',
