@@ -7,11 +7,44 @@
 #               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
 ###############################################################################
 
-## TODO THIS UPDATE IS FOR COMMAND-LINE TESTING PURPOSES ONLY, UPDATE ACCORDINGLY WHEN DEPLOYING FOR THE SERVER
+if [ -z "$TMP" ]; then
+	export TMP=/scratch
+fi
+
+
+ADD_EXPR="false"
+USER_EXPR="false"
+while (( $# > 0 )); do
+   case $1 in
+     "--jobid")
+       shift
+       JOBID=$1
+       ;;
+     "--add_expr")
+       shift
+       if [[ $1 == "yes" ]]; then
+          ADD_EXPR="true"
+       fi
+       ;;
+     "--usr_expr")
+       shift
+       if [[ $1 == "yes" ]]; then
+         USER_EXPR="true"
+       fi
+       ;;
+     "--infile")
+       shift
+       FILENAME=$1
+       ;;
+   esac
+   shift
+done
+
+
+# TODO THIS UPDATE IS FOR COMMAND-LINE TESTING PURPOSES ONLY, UPDATE ACCORDINGLY WHEN DEPLOYING FOR THE SERVER
 FILENAME=${1}
 ADD_EXPR=${2}
 USER_EXPR=${3}
-JOBID=${4}
 
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
@@ -101,7 +134,7 @@ cd ${SRCDIR}
 #echo "#######################"
 #echo "     Running Model"
 #echo "#######################"
-# chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-# $PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"
-# # > "${TMP}logs" 2>&1
-# # chmod 755 "${TMP}logs"
+chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"
+# > "${TMP}logs" 2>&1
+# chmod 755 "${TMP}logs"
