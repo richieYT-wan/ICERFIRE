@@ -1,104 +1,111 @@
 #!/bin/bash
 
 # This the main ICERFIRE-1.0 script. It acts as the full pipeline, doing the NetMHCpan, KernDist, PepX query, and Python script
-# Yat, Jul 2023
+# Yat-tsai Richie Wan, Jul 2023
 
 ###############################################################################
 #               GENERAL SETTINGS: CUSTOMIZE TO YOUR SITE
 ###############################################################################
 
-if [ -z "$TMP" ]; then
-	export TMP=/scratch
-fi
+# Define the characters that can be used
+characters="abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789"
+# Generate a random index between 0 and 61 (total number of characters)
+index=$((RANDOM % 60))
+# Get the character at the generated index
+first_char="${characters:index:1}"
+# Generate the remaining 4 characters as a combination of the defined characters
+rest_chars=$(head /dev/urandom | tr -dc "$characters" | head -c 4)
+# Combine the first and remaining characters
+JOBID="${first_char}${rest_chars}"
 
-
-ADD_EXPR="false"
-USER_EXPR="false"
-while (( $# > 0 )); do
-   case $1 in
-     "--jobid")
-       shift
-       JOBID=$1
-       ;;
-     "--add_expr")
-       shift
-       if [[ $1 == "yes" ]]; then
-          ADD_EXPR="true"
-       fi
-       ;;
-     "--usr_expr")
-       shift
-       if [[ $1 == "yes" ]]; then
-         USER_EXPR="true"
-       fi
-       ;;
-     "--infile")
-       shift
-       FILENAME=$1
-       ;;
-   esac
-   shift
+while getopts ":f:a:u:" opt; do
+  case ${opt} in
+    f )
+      FILENAME=$OPTARG
+      ;;
+    a )
+      ADD_EXPR=$OPTARG
+      ;;
+    u )
+      USER_EXPR=$OPTARG
+      ;;
+    \? )
+      echo "Usage: $0 -f <file_path> -a <add_expr> (true/false) -u <user_exp> (true/false)"
+      exit 1
+      ;;
+    : )
+      echo "Invalid option: -$OPTARG requires an argument"
+      exit 1
+      ;;
+  esac
 done
 
 
-# TODO THIS UPDATE IS FOR COMMAND-LINE TESTING PURPOSES ONLY, UPDATE ACCORDINGLY WHEN DEPLOYING FOR THE SERVER
-FILENAME=${1}
-ADD_EXPR=${2}
-USER_EXPR=${3}
+# Shift the processed options so that $1, $2, etc. now refer to non-option arguments
+shift $((OPTIND - 1))
+
+# Access the values using the variable names
+echo "File Path: $file_path"
+echo "Add Expression: $add_expr"
+echo "User Expression: $user_exp"
+
+if [ -z "$FILENAME" ] || [ -z "$ADD_EXPR" ] || [ -z "$USER_EXPR" ]; then
+  echo "Error: Missing required variables. Please provide values for file_path, add_expr, and user_exp."
+  echo "Usage: $0 -f <file_path> -a <add_expr> (true/false) -u <user_exp> (true/false)"
+  exit 1
+fi
 
 filename=$(basename ${FILENAME})
 basenm="${filename%.*}"
 final_fn="${basenm}_scored_output"
 
-# determine platform
-UNIX="Linux"
-AR="x86_64"
-
-# WWWROOT of web server
-WWWROOT=/var/www/html
-
-# WWWpath to service
-SERVICEPATH=/services/ICERFIRE-1.0
-
 # other settings
 PLATFORM="${UNIX}_${AR}"
-USERDIR="/tools/src/"
+
+# Replace USERDIR with the directory path containing ICERFIRE-1.0
+USERDIR="/src/tools/"
+# Replace PEPXDIR with the path to the folder containing the database file pepx-export.db
+PEPXDIR="/home/databases/userdb/pepx/"
+# Replace NETMHCPAN with the path to the binary of netMHCpan-4.1
+NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
+
+
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 SRCDIR="${USERDIR}ICERFIRE-1.0/src/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
-TMP="${USERDIR}ICERFIRE-1.0/tmp/"
-chmod 755 $TMP
-#TMP="${USERDIR}ICERFIRE-1.0/tmp/"
-NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
+OUT="${USERDIR}ICERFIRE-1.0/output/${JOBID}"
+
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
-PEPXDIR="/home/databases/userdb/pepx/"
+
+
+# Replace PYTHON a path to your installation of python3 
 PYTHON="/home/ctools/opt/anaconda3_202105/bin/python3"
 PYDIR="${USERDIR}ICERFIRE-1.0/pyscripts/"
 
-mkdir -p ${TMP}
-mkdir -p /tmp/${JOBID}
+mkdir -p ${OUT}
+chmod 755 $OUT
 # Go to the bashdir and run the bash commands
 cd ${BASHDIR}
-bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
+bash netmhcpan_pipeline.sh ${FILENAME} ${OUT} ${NETMHCPAN} ${KERNDIST}
 
 
 case "$ADD_EXPR-$USER_EXPR" in
   "true-true")
     echo "User-provided expression values; Skipping PepX query"
-#    echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-#    awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
-#    paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+#    echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
+#    awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
+#    paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
 #    ;;
 
     if awk -F ',' 'NF>=4 && $4 ~ /^[0-9]*(\.[0-9]*)?$/ {exit 0} END {exit 1}' "${FILENAME}"; then
-        echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-        awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
-        paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+        echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
+        awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
+        paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
     else
         echo "User-provided expression was selected but no fourth column found. Running expression database query"
         echo " "
-        bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
-        PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
+        bash query_pepx.sh "${OUT}${final_fn}_wt_icore.txt" ${OUT}
+        PF="${OUT}${final_fn}_wt_icore_pepx_output.csv"
     fi
     ;;
 
@@ -107,8 +114,8 @@ case "$ADD_EXPR-$USER_EXPR" in
 #    echo "#######################"
 #    echo "Processing PepX score"
 #    echo "#######################"
-    bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
-    PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
+    bash query_pepx.sh "${OUT}${final_fn}_wt_icore.txt" ${OUT}
+    PF="${OUT}${final_fn}_wt_icore_pepx_output.csv"
     ;;
 
   "false-false")
@@ -127,7 +134,6 @@ case "$ADD_EXPR-$USER_EXPR" in
 esac
 
 # Go to the Python dir and run the final model script
-#cd ${PYDIR}
 cd ${SRCDIR}
 #echo "HERE IS THE PF FILE $PF"
 #echo " "
@@ -135,6 +141,4 @@ cd ${SRCDIR}
 #echo "     Running Model"
 #echo "#######################"
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"
-# > "${TMP}logs" 2>&1
-# chmod 755 "${TMP}logs"
+$PYTHON run_model.py -j ${JOBID} -f "${OUT}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${OUT}" -ue "$USER_EXPR"
