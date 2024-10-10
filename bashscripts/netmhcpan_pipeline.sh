@@ -86,13 +86,13 @@ paste -d' ' "${OUTDIR}final_output_mut.txt" "${OUTDIR}final_output_wt.txt" > "${
 paste -d' ' "${OUTDIR}base_file.txt" "${OUTDIR}merged_output.txt" > "${OUTDIR}merged_final_output_tmp.txt" && mv "${OUTDIR}merged_final_output_tmp.txt" "${OUTDIR}merged_output.txt"
 
 # Deleting all temp files
-#rm "${OUTDIR}almostfinal_output_wt.txt"
-#rm "${OUTDIR}almostfinal_output_mut.txt"
-#rm "${OUTDIR}final_output_wt.txt"
-#rm "${OUTDIR}final_output_mut.txt"
-#rm "${OUTDIR}output_tmp_mut.txt"
-#rm "${OUTDIR}output_tmp_wt.txt"
-#rm "${OUTDIR}base_file.txt"
+rm "${OUTDIR}almostfinal_output_wt.txt"
+rm "${OUTDIR}almostfinal_output_mut.txt"
+rm "${OUTDIR}final_output_wt.txt"
+rm "${OUTDIR}final_output_mut.txt"
+rm "${OUTDIR}output_tmp_mut.txt"
+rm "${OUTDIR}output_tmp_wt.txt"
+rm "${OUTDIR}base_file.txt"
 #
 #echo " "
 #echo "#######################"
@@ -110,15 +110,17 @@ do
   ${KERNDIST} -blf "/tools/src/ICERFIRE-1.0/data/Matrices/blosum62.qij" -kmin 3 -kmax 8 "${OUTDIR}tmp1.pep" "${OUTDIR}tmp2.pep" | tail -n 1 | awk '{print $3}' >> "${OUTDIR}${fn}.kerndist"
   #{origin = $1} {$1 = $origin; print}
 done
-#rm ${OUTDIR}tmp1.pep ${OUTDIR}tmp2.pep
+rm ${OUTDIR}tmp1.pep ${OUTDIR}tmp2.pep
+
 paste -d' ' "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist" > "${OUTDIR}${final_fn}_tmp.txt"
-#rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
+
+rm "${OUTDIR}merged_output.txt" "${OUTDIR}${fn}.kerndist"
 
 # Here, need to create a new tmp file with the wild_type+header, paste it to the final_fn file so that we also have the full wt not just the icore_wt
 echo "wild_type" > "${OUTDIR}${filename}_fullwt.txt"
 cut -d ',' -f 2 "${input_file}" >> "${OUTDIR}${filename}_fullwt.txt"
 paste -d' ' "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt" > "${OUTDIR}${final_fn}.txt"
-#rm "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt"
+rm "${OUTDIR}${final_fn}_tmp.txt" "${OUTDIR}${filename}_fullwt.txt"
 
 awk -F ' ' 'NR>1 {print $13}' "${OUTDIR}${final_fn}.txt" > "${OUTDIR}${final_fn}_wt_icore.txt"
 # Giving permission somehow because otherwise my other part of the scripts couldnt read it

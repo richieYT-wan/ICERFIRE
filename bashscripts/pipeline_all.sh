@@ -79,7 +79,7 @@ mkdir -p ${TMP}
 mkdir -p /tmp/${JOBID}
 # Go to the bashdir and run the bash commands
 
-cp ${FILENAME} ${TMP}RAW_INPUT_FILE.txt
+cat ${FILENAME} > ${TMP}RAW_INPUT_FILE.txt
 cd ${BASHDIR}
 bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 
