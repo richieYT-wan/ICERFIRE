@@ -33,8 +33,9 @@ query='select dataset_id, peptide, total_peptide_tpm, total_scaled_peptide_tpm, 
 query="$query gene_num_proteins, gene_num_matching_proteins, gene_frac_matching_proteins"
 query="$query from peptide_gene_tpms_collapsed where"
 query="$query dataset_id = $dataset_id"
-query="$query and peptide in (\"$peptide_string\")"
+query="$query and peptide in ($peptide_string)"
 query="$query order by peptide asc;"
+echo $query > "${TMPDIR}${output_file}_PEPTIDE_STRING_QUERY.txt"
 
 #echo "Running PepX query on ${1}, saving in ${TMPDIR}, using ${SQLITE}"
 $SQLITE $database -header "$query" > "${TMPDIR}${output_file}.csv"
