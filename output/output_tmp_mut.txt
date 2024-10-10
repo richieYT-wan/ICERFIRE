@@ -1,0 +1,61 @@
+# /tools/src/netMHCpan-4.1/Linux_x86_64/bin/netMHCpan -l 8,9,10,11,12 -f /tmp/tmp.kWenChb23F -a HLA-A0101,1 -s
+# Wed Aug 23 14:45:25 2023
+# User: riwa
+# PWD : /tools/src/ICERFIRE-1.0/bashscripts
+# Host: Linux engine 5.4.0-149-generic x86_64
+# -l       8,9,10,11,12         Peptide length [8-11] (multiple length with ,)
+# -f       /tmp/tmp.kWenChb23F  File name with input
+# -a       HLA-A0101,1          MHC allele
+# -s       1                    Sort output on descending affinity
+# Command line parameters set to:
+#	[-rdir filename]     /tools/src/netMHCpan-4.1/Linux_x86_64 Home directory for NetMHpan
+#	[-syn filename]      /tools/src/netMHCpan-4.1/Linux_x86_64/data/synlist.bin Synaps file
+#	[-v]                 0                    Verbose mode
+#	[-dirty]             0                    Dirty mode, leave tmp dir+files
+#	[-tdir filename]     /scratch/netMHCpanXXXXXX Temporary directory (made with mkdtemp)
+#	[-hlapseudo filename] /tools/src/netMHCpan-4.1/Linux_x86_64/data/MHC_pseudo.dat File with MHC pseudo sequences
+#	[-hlaseq filename]                        File with full length MHC sequences
+#	[-a line]            HLA-A0101,1          MHC allele
+#	[-f filename]        /tmp/tmp.kWenChb23F  File name with input
+#	[-w]                 0                    w option for webface
+#	[-s]                 1                    Sort output on descending affinity
+#	[-p]                 0                    Use peptide input
+#	[-rth float]         0.500000             Rank Threshold for high binding peptides
+#	[-rlt float]         2.000000             Rank Threshold for low binding peptides
+#	[-l string]          8,9,10,11,12         Peptide length [8-11] (multiple length with ,)
+#	[-xls]               0                    Save output to xls file
+#	[-xlsfile filename]  NetMHCpan_out.xls    Filename for xls dump
+#	[-t float]           -99.900002           Threshold for output (%rank) [<0 print all]
+#	[-thrfmt filename]   /tools/src/netMHCpan-4.1/Linux_x86_64/data/threshold/%s.thr.%s Format for threshold filenames
+#	[-expfix]            0                    Exclude prefix from synlist
+#	[-version filename]  /tools/src/netMHCpan-4.1/Linux_x86_64/data/version File with version information
+#	[-inptype int]       0                    Input type [0] FASTA [1] Peptide
+#	[-listMHC]           0                    Print list of alleles included in netMHCpan
+#	[-allname filename]  /tools/src/netMHCpan-4.1/Linux_x86_64/data/allelenames File with print names for alleles
+#	[-BA]                0                    Include Binding affinity prediction
+
+# NetMHCpan version 4.1
+
+# Tmpdir made /scratch/netMHCpanzM5Taq
+# Input is in FSA format
+
+# Peptide length 8,9,10,11,12
+
+# Make EL predictions
+
+HLA-A0101 : Distance to training data  0.000 (using nearest neighbor HLA-A01:01)
+
+# Rank Threshold for Strong binding peptides   0.500
+# Rank Threshold for Weak binding peptides   2.000
+---------------------------------------------------------------------------------------------------------------------------
+ Pos         MHC        Peptide      Core Of Gp Gl Ip Il        Icore        Identity  Score_EL %Rank_EL BindLevel
+---------------------------------------------------------------------------------------------------------------------------
+   1  HLA-A*0101       YTDQISKY YTD-QISKY  0  0  0  3  1     YTDQISKY            seq1 0.9779370    0.013 <= SB
+   1  HLA-A*0101      YTDQISKYA YTDQISKYA  0  0  0  0  0    YTDQISKYA            seq1 0.4697240    0.346 <= SB
+   2  HLA-A*0101       TDQISKYA -TDQISKYA  0  0  0  0  1     TDQISKYA            seq1 0.0022300   12.567
+---------------------------------------------------------------------------------------------------------------------------
+
+Protein seq1. Allele HLA-A*0101. Number of high binders 2. Number of weak binders 0. Number of peptides 3
+
+-----------------------------------------------------------------------------------
+Error. 1 cannot be found in hla_pseudo list /tools/src/netMHCpan-4.1/Linux_x86_64/data/MHC_pseudo.dat
