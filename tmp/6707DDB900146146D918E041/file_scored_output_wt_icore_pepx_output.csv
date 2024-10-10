@@ -1,4 +1,0 @@
-dataset_id,peptide,total_peptide_tpm,total_scaled_peptide_tpm,total_gene_tpm,gene_symbols,gene_ensg_ids,gene_num_proteins,gene_num_matching_proteins,gene_frac_matching_proteins
-1,GKIPPSVQV,105.084,0.0,105.084060668945,YWHAH,ENSG00000128245,4,1,0.0
-1,RRASKALL,0.002,0.001,0.0019999782089144,AQP12A;AQP12B,ENSG00000184945;ENSG00000185176,1;5,1;2,1.0;0.0
-1,TIKDIASAI,36.991,0.0,36.9909400939941,PDCD10,ENSG00000114209,14,10,0.0

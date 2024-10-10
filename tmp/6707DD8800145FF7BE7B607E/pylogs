@@ -1,34 +1,0 @@
-
-
-Eval Folds:   0%|          | 0/10 [00:00<?, ?it/s][A[A
-
-Eval Folds:  80%|████████  | 8/10 [00:00<00:00, 22.06it/s][A[A
-
-                                                          [A[ATraceback (most recent call last):
-  File "run_model.py", line 113, in <module>
-    predictions, run_name, jobid = main()
-  File "run_model.py", line 97, in main
-    predictions.to_csv(f'{outdir}ICERFIRE_predictions.csv',
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/generic.py", line 3387, in to_csv
-    return DataFrameRenderer(formatter).to_csv(
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/io/formats/format.py", line 1064, in to_csv
-    csv_formatter = CSVFormatter(
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/io/formats/csvs.py", line 77, in __init__
-    self.cols = self._initialize_columns(cols)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/io/formats/csvs.py", line 144, in _initialize_columns
-    self.obj = self.obj.loc[:, cols]
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 889, in __getitem__
-    return self._getitem_tuple(key)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 1069, in _getitem_tuple
-    return self._getitem_tuple_same_dim(tup)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 775, in _getitem_tuple_same_dim
-    retval = getattr(retval, self.name)._getitem_axis(key, axis=i)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 1113, in _getitem_axis
-    return self._getitem_iterable(key, axis=axis)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 1053, in _getitem_iterable
-    keyarr, indexer = self._get_listlike_indexer(key, axis, raise_missing=False)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 1266, in _get_listlike_indexer
-    self._validate_read_indexer(keyarr, indexer, axis, raise_missing=raise_missing)
-  File "/home/ctools/opt/anaconda3_202105/lib/python3.8/site-packages/pandas/core/indexing.py", line 1321, in _validate_read_indexer
-    raise KeyError(
-KeyError: "Passing list-likes to .loc or [] with any missing labels is no longer supported. The following labels were missing: Index(['wild_type'], dtype='object'). See https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#deprecate-loc-reindex-listlike"

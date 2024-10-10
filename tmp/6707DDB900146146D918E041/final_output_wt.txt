@@ -1,4 +1,0 @@
-icore_wt_aligned EL_rank_wt_aligned
-RRASKALL 1.021
-GKIPPSVQV 5.060
-TIKDIASAI 1.170
