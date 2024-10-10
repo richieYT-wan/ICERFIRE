@@ -137,4 +137,3 @@ cd ${SRCDIR}
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
 $PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"
 # > "${TMP}logs" 2>&1
-# chmod 755 "${TMP}logs"
