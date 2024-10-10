@@ -25,7 +25,8 @@ output_file="${basenm}_pepx_output"
 
 
 peptide_string=`cat $filepath | perl -ne 'while(<>){chomp; push @all, $_;} print join("\",\"",@all)'`
-echo $peptide_string > "${TMPDIR}${output_file}_PEPTIDE_STRING.txt"
+echo $filepath > "${TMPDIR}${output_file}_PEPTIDE_STRING.txt"
+echo $peptide_string >> "${TMPDIR}${output_file}_PEPTIDE_STRING.txt"
 # Select only those fields, from the peptide_gene_tpms_collapsed table where dataset_id = 1 (id_1 == TCGA_PANCAN)
 query='select dataset_id, peptide, total_peptide_tpm, total_scaled_peptide_tpm, total_gene_tpm, gene_symbols, gene_ensg_ids,'
 query="$query gene_num_proteins, gene_num_matching_proteins, gene_frac_matching_proteins"
