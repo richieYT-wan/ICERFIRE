@@ -1,1 +1,0 @@
-Peptide icore_start_pos HLA Pep Core Of Gp Gl Ip Il icore_mut EL_rank_mut icore_wt_aligned EL_rank_wt_aligned icore_similarity_score wild_type

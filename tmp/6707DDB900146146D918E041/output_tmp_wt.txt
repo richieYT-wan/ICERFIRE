@@ -1,0 +1,21 @@
+
+# NetMHCpan version 4.1
+
+# Tmpdir made /var/www/webface/tmp/server/ICERFIRE-1.0/6707DDB900146146D918E041/netMHCpanj7899H
+# Input is in PEPTIDE format
+
+# Make EL predictions
+
+HLA-B5201 : Distance to training data  0.000 (using nearest neighbor HLA-B52:01)
+
+# Rank Threshold for Strong binding peptides   0.500
+# Rank Threshold for Weak binding peptides   2.000
+---------------------------------------------------------------------------------------------------------------------------
+ Pos         MHC        Peptide      Core Of Gp Gl Ip Il        Icore        Identity  Score_EL %Rank_EL BindLevel
+---------------------------------------------------------------------------------------------------------------------------
+   1  HLA-B*5201      TIKDIASAI TIKDIASAI  0  0  0  0  0    TIKDIASAI         PEPLIST 0.1458710    1.170 <= WB
+---------------------------------------------------------------------------------------------------------------------------
+
+Protein PEPLIST. Allele HLA-B*5201. Number of high binders 0. Number of weak binders 1. Number of peptides 1
+
+-----------------------------------------------------------------------------------

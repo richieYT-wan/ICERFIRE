@@ -1,0 +1,22 @@
+
+# NetMHCpan version 4.1
+
+# Tmpdir made /var/www/webface/tmp/server/ICERFIRE-1.0/6707DD8800145FF7BE7B607E/netMHCpanE1Z1Tm
+# Input is in PEPTIDE format
+
+# Make EL predictions
+
+HLA-A0201 : Distance to training data  0.000 (using nearest neighbor HLA-A02:01)
+
+# Rank Threshold for Strong binding peptides   0.500
+# Rank Threshold for Weak binding peptides   2.000
+---------------------------------------------------------------------------------------------------------------------------
+ Pos         MHC        Peptide      Core Of Gp Gl Ip Il        Icore        Identity  Score_EL %Rank_EL BindLevel
+---------------------------------------------------------------------------------------------------------------------------
+   1  HLA-A*0201      GKIPPSVQV GKIPPSVQV  0  0  0  0  0    GKIPPSVQV         PEPLIST 0.0181350    5.060
+---------------------------------------------------------------------------------------------------------------------------
+
+Protein PEPLIST. Allele HLA-A*0201. Number of high binders 0. Number of weak binders 0. Number of peptides 1
+
+-----------------------------------------------------------------------------------
+Error. 105.084 cannot be found in hla_pseudo list /tools/src/netMHCpan-4.1/Linux_x86_64/data/MHC_pseudo.dat

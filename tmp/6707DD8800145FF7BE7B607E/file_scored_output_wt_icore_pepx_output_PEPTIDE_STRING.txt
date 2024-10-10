@@ -1,0 +1,2 @@
+/var/www/html/services/ICERFIRE-1.0/tmp/6707DD8800145FF7BE7B607E/file_scored_output_wt_icore.txt
+"RRASKALL","SSGFRNIAVK","GKIPPSVQV"

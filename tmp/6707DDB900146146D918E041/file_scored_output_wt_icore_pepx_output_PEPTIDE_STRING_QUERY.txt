@@ -1,0 +1,1 @@
+select dataset_id, peptide, total_peptide_tpm, total_scaled_peptide_tpm, total_gene_tpm, gene_symbols, gene_ensg_ids, gene_num_proteins, gene_num_matching_proteins, gene_frac_matching_proteins from peptide_gene_tpms_collapsed where dataset_id = 1 and peptide in ("RRASKALL","GKIPPSVQV","TIKDIASAI") order by peptide asc;
