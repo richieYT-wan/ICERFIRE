@@ -64,8 +64,8 @@ while IFS=',' read -r column1 column2 column3; do
   # Discard line and grepping, extract only the aligned peptide and rank
   grep -v '^#' "${OUTDIR}output_tmp_wt.txt" | grep -v '^HLA' | grep -v '^\-' | awk 'NF'| awk 'FNR==2{print $3,$13}' >> "${OUTDIR}almostfinal_output_wt.txt"
   # remove temporary file
-  rm "$tmp_file_mut"
-  rm "$tmp_file_wt"
+#  rm "$tmp_file_mut"
+#  rm "$tmp_file_wt"
 
   # increment line number
   line_number=$((line_number+1))
