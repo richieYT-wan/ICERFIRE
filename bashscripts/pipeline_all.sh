@@ -87,22 +87,6 @@ bash netmhcpan_pipeline.sh ${FILENAME} ${TMP} ${NETMHCPAN} ${KERNDIST}
 case "$ADD_EXPR-$USER_EXPR" in
   "true-true")
     echo "User-provided expression values; Skipping PepX query"
-#    echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-#    awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
-#    paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
-#    ;;
-#
-#    if awk -F ',' 'NF>=4 && $4 ~ /^[0-9]*(\.[0-9]*)?$/ {exit 0} END {exit 1}' "${FILENAME}"; then
-#        echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-#        awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
-#        paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
-#    else
-#        echo "User-provided expression was selected but no fourth column found. Running expression database query"
-#        echo " "
-#        bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
-#        PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
-#    fi
-  # Read the first line and determine the number of columns and content of the fourth column
     first_line=$(head -n 1 "${FILENAME}")
 
     # Use awk to count the number of fields (columns) and check if the fourth column is numeric
@@ -155,4 +139,4 @@ cd ${SRCDIR}
 #echo "     Running Model"
 #echo "#######################"
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR" > "${TMP}pylogs" 2>&1
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"# > "${TMP}pylogs" 2>&1
