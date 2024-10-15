@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/bash
 
 # This the main ICERFIRE-1.0 script. It acts as the full pipeline, doing the NetMHCpan, KernDist, PepX query, and Python script
 # Yat-tsai Richie Wan, Jul 2023
@@ -16,6 +16,7 @@ first_char="${characters:index:1}"
 # Generate the remaining 4 characters as a combination of the defined characters
 rest_chars=$(head /dev/urandom | tr -dc "$characters" | head -c 4)
 # Combine the first and remaining characters
+
 JOBID="${first_char}${rest_chars}"
 
 while getopts ":f:a:u:" opt; do
