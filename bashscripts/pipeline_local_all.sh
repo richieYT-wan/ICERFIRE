@@ -46,9 +46,9 @@ done
 shift $((OPTIND - 1))
 
 # Access the values using the variable names
-echo "File Path: $file_path"
-echo "Add Expression: $add_expr"
-echo "User Expression: $user_exp"
+echo "File Path: $FILENAME"
+echo "Add Expression: $ADD_EXPR"
+echo "User Expression: $USER_EXPR"
 
 if [ -z "$FILENAME" ] || [ -z "$ADD_EXPR" ] || [ -z "$USER_EXPR" ]; then
   echo "Error: Missing required variables. Please provide values for file_path, add_expr, and user_exp."
