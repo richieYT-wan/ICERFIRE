@@ -91,29 +91,43 @@ bash netmhcpan_pipeline.sh ${FILENAME} ${OUT} ${NETMHCPAN} ${KERNDIST}
 
 case "$ADD_EXPR-$USER_EXPR" in
   "true-true")
-    echo "User-provided expression values; Skipping PepX query"
-#    echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
-#    awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
-#    paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
+#    echo "User-provided expression values; Skipping PepX query"
+##    echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
+##    awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
+##    paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
+##    ;;
+#
+#    if awk -F ',' 'NF>=4 && $4 ~ /^[0-9]*(\.[0-9]*)?$/ {exit 0} END {exit 1}' "${FILENAME}"; then
+#        echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
+#        awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
+#        paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
+#    else
+#        echo "User-provided expression was selected but no fourth column found. Running expression database query"
+#        echo " "
+#        bash query_pepx.sh "${OUT}${final_fn}_wt_icore.txt" ${OUT}
+#        PF="${OUT}${final_fn}_wt_icore_pepx_output.csv"
+#    fi
 #    ;;
+    echo "User-provided expression values; Skipping PepX query"
+    first_line=$(head -n 1 "${FILENAME}")
 
-    if awk -F ',' 'NF>=4 && $4 ~ /^[0-9]*(\.[0-9]*)?$/ {exit 0} END {exit 1}' "${FILENAME}"; then
-        echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
-        awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
-        paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
+    # Use awk to count the number of fields (columns) and check if the fourth column is numeric
+    num_columns=$(echo "$first_line" | awk -F ',' '{print NF}')
+    fourth_column_is_numeric=$(echo "$first_line" | awk -F ',' '{if ($4 + 0 == $4) print "yes"; else print "no"}')
+
+    # Perform actions based on whether there are 4 columns and the fourth column is numeric
+    if [ "$num_columns" -eq 4 ] && [ "$fourth_column_is_numeric" = "yes" ]; then
+        echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
+        awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
+        paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
     else
-        echo "User-provided expression was selected but no fourth column found. Running expression database query"
+        echo "User-provided expression was selected but no valid fourth column found. Running expression database query"
         echo " "
-        bash query_pepx.sh "${OUT}${final_fn}_wt_icore.txt" ${OUT}
-        PF="${OUT}${final_fn}_wt_icore_pepx_output.csv"
+        bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
+        PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
     fi
-    ;;
-
+  ;;
   "true-false")
-#    echo " "
-#    echo "#######################"
-#    echo "Processing PepX score"
-#    echo "#######################"
     bash query_pepx.sh "${OUT}${final_fn}_wt_icore.txt" ${OUT}
     PF="${OUT}${final_fn}_wt_icore_pepx_output.csv"
     ;;
@@ -135,10 +149,6 @@ esac
 
 # Go to the Python dir and run the final model script
 cd ${SRCDIR}
-#echo "HERE IS THE PF FILE $PF"
-#echo " "
-#echo "#######################"
-#echo "     Running Model"
-#echo "#######################"
+
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
 $PYTHON run_model.py -j ${JOBID} -f "${OUT}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${OUT}" -ue "$USER_EXPR"
