@@ -74,7 +74,7 @@ NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 SRCDIR="${USERDIR}ICERFIRE-1.0/src/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
-OUT="${USERDIR}ICERFIRE-1.0/output/${JOBID}/"
+OUT="${USERDIR}ICERFIRE-1.0/output/${basenm}_$(date +"%y%m%d_%H%M")_${JOBID}/"
 
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
 
