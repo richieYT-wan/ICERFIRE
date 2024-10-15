@@ -64,7 +64,7 @@ final_fn="${basenm}_scored_output"
 PLATFORM="${UNIX}_${AR}"
 
 # Replace USERDIR with the directory path containing ICERFIRE-1.0
-USERDIR="/src/tools/"
+USERDIR="/tools/src/"
 # Replace PEPXDIR with the path to the folder containing the database file pepx-export.db
 PEPXDIR="/home/databases/userdb/pepx/"
 # Replace NETMHCPAN with the path to the binary of netMHCpan-4.1
