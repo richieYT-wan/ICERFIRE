@@ -74,7 +74,7 @@ NETMHCPAN="/tools/src/netMHCpan-4.1/netMHCpan"
 BASHDIR="${USERDIR}ICERFIRE-1.0/bashscripts/"
 SRCDIR="${USERDIR}ICERFIRE-1.0/src/"
 DATADIR="${USERDIR}ICERFIRE-1.0/data/"
-OUT="${USERDIR}ICERFIRE-1.0/output/${JOBID}"
+OUT="${USERDIR}ICERFIRE-1.0/output/${JOBID}/"
 
 KERNDIST="${USERDIR}ICERFIRE-1.0/bin/pep_kernel_dist"
 
@@ -118,14 +118,14 @@ case "$ADD_EXPR-$USER_EXPR" in
 
     # Perform actions based on whether there are 4 columns and the fourth column is numeric
     if [ "$num_columns" -eq 4 ] && [ "$fourth_column_is_numeric" = "yes" ]; then
-        echo 'total_gene_tpm' > "${TMP}${final_fn}_tmp_expr.txt"
-        awk -F ',' '{print $4}' "${FILENAME}" >> "${TMP}${final_fn}_tmp_expr.txt"
-        paste -d ' ' "${TMP}${final_fn}.txt" "${TMP}${final_fn}_tmp_expr.txt" > "${TMP}${final_fn}_tmp_merged.txt" && mv "${TMP}${final_fn}_tmp_merged.txt" "${TMP}${final_fn}.txt"
+        echo 'total_gene_tpm' > "${OUT}${final_fn}_tmp_expr.txt"
+        awk -F ',' '{print $4}' "${FILENAME}" >> "${OUT}${final_fn}_tmp_expr.txt"
+        paste -d ' ' "${OUT}${final_fn}.txt" "${OUT}${final_fn}_tmp_expr.txt" > "${OUT}${final_fn}_tmp_merged.txt" && mv "${OUT}${final_fn}_tmp_merged.txt" "${OUT}${final_fn}.txt"
     else
         echo "User-provided expression was selected but no valid fourth column found. Running expression database query"
         echo " "
-        bash query_pepx.sh "${TMP}${final_fn}_wt_icore.txt" ${TMP}
-        PF="${TMP}${final_fn}_wt_icore_pepx_output.csv"
+        bash query_pepx.sh "${OUT}${final_fn}_wt_icore.txt" ${OUT}
+        PF="${OUT}${final_fn}_wt_icore_pepx_output.csv"
     fi
   ;;
   "true-false")
