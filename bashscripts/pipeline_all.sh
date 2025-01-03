@@ -131,13 +131,9 @@ case "$ADD_EXPR-$USER_EXPR" in
 esac
 
 # Go to the Python dir and run the final model script
-#cd ${PYDIR}
 cd ${SRCDIR}
-#echo "HERE IS THE PF FILE $PF"
-#echo " "
-#echo "#######################"
-#echo "     Running Model"
-#echo "#######################"
+
+
+# TODO: TMP=${WWWROOT}${SERVICEPATH}/tmp/${JOBID}/
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"
-# > "${TMP}pylogs" 2>&1
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR" > "${TMP}pylogs" 2>&1
