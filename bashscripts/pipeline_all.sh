@@ -136,4 +136,5 @@ cd ${SRCDIR}
 
 # TODO: TMP=${WWWROOT}${SERVICEPATH}/tmp/${JOBID}/
 chmod 755 "/home/locals/tools/src/ICERFIRE-1.0/src/"
-$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR" > "${TMP}pylogs" 2>&1
+$PYTHON run_model.py -j ${JOBID} -f "${TMP}${final_fn}.txt" -pf "$PF" -ae "$ADD_EXPR" -o "${TMP}" -ue "$USER_EXPR"
+# > "${TMP}pylogs" 2>&1
